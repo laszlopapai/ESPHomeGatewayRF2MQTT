@@ -10,7 +10,7 @@ CONF_MISO = "miso_pin"
 CONF_RX = "rx_pin"
 CONF_TX = "tx_pin"
 
-DEPENDENCIES = ["spi"]
+#DEPENDENCIES = ["spi"]
 
 empty_spi_component_ns = cg.esphome_ns.namespace("cc1101")
 EmptySPIComponent = empty_spi_component_ns.class_(
