@@ -35,12 +35,12 @@ public:
     }
 
 private:
-    uint8_t m_ss;
-    uint8_t m_sck;
-    uint8_t m_mosi;
-    uint8_t m_miso;
-    uint8_t m_gdo0;
-    uint8_t m_gdo2;
+    uint32_t m_ss;
+    uint32_t m_sck;
+    uint32_t m_mosi;
+    uint32_t m_miso;
+    uint32_t m_gdo0;
+    uint32_t m_gdo2;
 };
 
 }
