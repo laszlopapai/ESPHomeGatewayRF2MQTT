@@ -14,16 +14,16 @@ void cc1101_mqtt::setup() {
   ESP_LOGCONFIG(TAG, "GDO0: %d", (uint32_t)m_gdo0);
   ESP_LOGCONFIG(TAG, "GDO2: %d", (uint32_t)m_gdo2);
 
-  if (ELECHOUSE_cc1101.getCC1101()) {
+  if (m_device.getCC1101()) {
     ESP_LOGCONFIG(TAG, "CC1101 SPI success");
     m_spi = 1;
+    m_device.Init();
+    m_device.SetRx();
   }
-  else{
+  else {
     ESP_LOGCONFIG(TAG, "CC1101 SPI failed");
     m_spi = 2;
   }
-  ELECHOUSE_cc1101.Init();
-  ELECHOUSE_cc1101.SetRx();
 }
 
 void cc1101_mqtt::loop() {

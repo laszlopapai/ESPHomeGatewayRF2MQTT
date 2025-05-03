@@ -27,8 +27,8 @@ public:
         this->m_miso = miso;
         this->m_mosi = mosi;
         this->m_ss = ss;
-        ELECHOUSE_cc1101.setSpiPin(sck, miso, mosi, ss);
-        ELECHOUSE_cc1101.setGDO0(m_gdo0);
+        m_device.setSpiPin(sck, miso, mosi, ss);
+        m_device.setGDO0(m_gdo0);
     }
 
     void set_tx(uint8_t tx) {
@@ -51,6 +51,8 @@ private:
     bool m_state = false;
     uint32_t m_spi = 0;
     GPIOPin *pin_;
+
+    ELECHOUSE_CC1101 m_device;
 };
 
 }
