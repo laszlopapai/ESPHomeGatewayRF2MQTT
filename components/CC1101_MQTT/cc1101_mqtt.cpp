@@ -16,9 +16,11 @@ void cc1101_mqtt::setup() {
 
   if (ELECHOUSE_cc1101.getCC1101()) {
     ESP_LOGCONFIG(TAG, "CC1101 SPI success");
+    m_spi = 1;
   }
   else{
     ESP_LOGCONFIG(TAG, "CC1101 SPI failed");
+    m_spi = 2;
   }
   ELECHOUSE_cc1101.Init();
   ELECHOUSE_cc1101.SetRx();
@@ -26,7 +28,7 @@ void cc1101_mqtt::setup() {
 
 void cc1101_mqtt::loop() {
   if (m_count % 1000 == 0) {
-    ESP_LOGCONFIG(TAG, "CC1101 loop %d", m_count);
+    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi: %d", m_count, m_spi);
   }
   m_count++;
 }

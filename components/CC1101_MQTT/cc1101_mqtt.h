@@ -44,6 +44,7 @@ private:
     uint8_t m_gdo0;
     uint8_t m_gdo2;
     uint32_t m_count = 0;
+    uint32_t m_spi = 0;
 };
 
 }
