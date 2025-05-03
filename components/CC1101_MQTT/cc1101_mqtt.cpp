@@ -15,7 +15,7 @@ void cc1101_mqtt::setup() {
   ESP_LOGCONFIG(TAG, "GDO0: %d", (uint32_t)m_gdo0);
   ESP_LOGCONFIG(TAG, "GDO2: %d", (uint32_t)m_gdo2);
 
-  if (dev.getCC1101()) {
+  if (ELECHOUSE_cc1101.getCC1101()) {
     ESP_LOGE(TAG, "CC1101 SPI success");
   }
   else{
