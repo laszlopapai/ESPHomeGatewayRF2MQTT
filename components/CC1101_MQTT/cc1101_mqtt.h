@@ -20,6 +20,8 @@ public:
     
     void dump_config() override;
 
+    void set_pin(GPIOPin *pin) { pin_ = pin; }
+
     void set_spi(uint8_t sck, uint8_t miso, uint8_t mosi, uint8_t ss) {
         this->m_sck = sck;
         this->m_miso = miso;
@@ -45,7 +47,10 @@ private:
     uint8_t m_gdo0;
     uint8_t m_gdo2;
     uint32_t m_count = 0;
+    uint32_t m_change = 0;
+    bool m_state = false;
     uint32_t m_spi = 0;
+    GPIOPin *pin_;
 };
 
 }

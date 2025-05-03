@@ -27,8 +27,16 @@ void cc1101_mqtt::setup() {
 }
 
 void cc1101_mqtt::loop() {
+
+  bool state = pin_->digital_read();
+  if (state != m_state) {
+    m_state = state;
+    m_change++;    
+  }
+
   if (m_count % 1000 == 0) {
-    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi: %d", m_count, m_spi);
+    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi: %d changes: %d", m_count, m_spi, m_change);
+    m_change = 0;
   }
   m_count++;
 }

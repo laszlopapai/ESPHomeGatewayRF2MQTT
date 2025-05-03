@@ -25,8 +25,8 @@ CONFIG_SCHEMA = (
         cv.Required(CONF_MOSI): cv.int_range(min=0, max=20),
         cv.Required(CONF_MISO): cv.int_range(min=0, max=20),
         cv.Optional(CONF_RX): cv.int_range(min=0, max=20),
-        cv.Optional(CONF_TX): cv.int_range(min=0, max=20)
-
+        cv.Optional(CONF_TX): cv.int_range(min=0, max=20),
+        cv.Required(CONF_PIN): pins.gpio_input_pin_schema
 #        cv.Optional("test", default = "0.5"): cv.positive_not_null_float
     })
     .extend(cv.COMPONENT_SCHEMA)
@@ -41,6 +41,9 @@ async def to_code(config):
 
     cg.add(var.set_spi(config[CONF_CLK], config[CONF_MOSI], config[CONF_MISO], config[CONF_SS]))
     
+    pin = await cg.gpio_pin_expression(config[CONF_PIN])
+    cg.add(var.set_pin(pin))
+
     if CONF_RX in config:
         cg.add(var.set_rx(config[CONF_RX]))
         cg.add_define("USE_RX")
