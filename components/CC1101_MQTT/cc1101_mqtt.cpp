@@ -36,7 +36,7 @@ void cc1101_mqtt::loop() {
   }
 
   uint32_t time = millis();
-  if (time - m_time > 1000) {
+  if (time - m_time >= 1000) {
     m_time = time;
 
     ESP_LOGCONFIG(TAG, "CC1101 loop %d spi_status: %d changes: %d", m_time, m_spi, m_change);
