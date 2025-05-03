@@ -24,8 +24,8 @@ CONFIG_SCHEMA = (
 #        cv.Required(CONF_CLK): cv.int_range(min=0, max=20),
 #        cv.Required(CONF_MOSI): cv.int_range(min=0, max=20),
 #        cv.Required(CONF_MISO): cv.int_range(min=0, max=20),
-#        cv.Required(CONF_RX): cv.int_range(min=0, max=20),
-#        cv.Required(CONF_TX): cv.int_range(min=0, max=20),
+        cv.Optional(CONF_RX): cv.int_range(min=0, max=20),
+        cv.Optional(CONF_TX): cv.int_range(min=0, max=20)
 
 #        cv.Optional("test", default = "0.5"): cv.positive_not_null_float
     })
@@ -41,10 +41,10 @@ async def to_code(config):
 
 #    cg.add(var.set_spi(config[CONF_CLK], config[CONF_MOSI], config[CONF_MISO], config[CONF_SS]))
     
-#    if CONF_RX in config:
-#        cg.add(var.set_rx(config[CONF_RX]))
-#        cg.add_define("USE_RX")
+    if CONF_RX in config:
+        cg.add(var.set_rx(config[CONF_RX]))
+        cg.add_define("USE_RX")
 
-#    if CONF_TX in config:
-#        cg.add(var.set_tx(config[CONF_TX]))
-#        cg.add_define("USE_TX")
+    if CONF_TX in config:
+        cg.add(var.set_tx(config[CONF_TX]))
+        cg.add_define("USE_TX")
