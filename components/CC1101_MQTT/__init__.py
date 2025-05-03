@@ -14,7 +14,7 @@ DEPENDENCIES = ["spi"]
 
 empty_spi_component_ns = cg.esphome_ns.namespace("cc1101")
 EmptySPIComponent = empty_spi_component_ns.class_(
-    "cc1101_mqtt", cg.Component, spi.SPIDevice
+    "cc1101_mqtt"#, cg.Component, spi.SPIDevice
 )
 
 CONFIG_SCHEMA = (
@@ -30,14 +30,14 @@ CONFIG_SCHEMA = (
 #        cv.Optional("test", default = "0.5"): cv.positive_not_null_float
     })
     .extend(cv.COMPONENT_SCHEMA)
-    .extend(spi.spi_device_schema(cs_pin_required=True))
+#    .extend(spi.spi_device_schema(cs_pin_required=True))
 )
 
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
-    await spi.register_spi_device(var, config)
+#    await spi.register_spi_device(var, config)
 
     cg.add(var.set_spi(config[CONF_CLK], config[CONF_MOSI], config[CONF_MISO], config[CONF_SS]))
     
