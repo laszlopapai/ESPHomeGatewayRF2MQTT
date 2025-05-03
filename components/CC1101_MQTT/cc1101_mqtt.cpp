@@ -48,7 +48,7 @@ void cc1101_mqtt::loop() {
     m_time = time;
 
 
-    std:string pulses = "Pulses: ";
+    std::string pulses = "Pulses: ";
     for (auto pulse : m_pulseIndices) {
       pulses += std::to_string(pulse) + " ";
     }
