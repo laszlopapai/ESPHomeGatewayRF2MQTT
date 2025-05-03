@@ -25,7 +25,9 @@ void cc1101_mqtt::setup() {
 }
 
 void cc1101_mqtt::loop() {
-  ESP_LOGCONFIG(TAG, "CC1101 %d", m_count);
+  if (m_count % 1000 == 0) {
+    ESP_LOGCONFIG(TAG, "CC1101 loop %d", m_count);
+  }
   m_count++;
 }
 
