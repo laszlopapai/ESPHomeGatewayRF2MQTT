@@ -46,7 +46,9 @@ private:
     uint8_t m_miso;
     uint8_t m_gdo0;
     uint8_t m_gdo2;
-    uint32_t m_count = 0;
+
+    uint32_t m_time = 0;
+
     uint32_t m_change = 0;
     bool m_state = false;
     uint32_t m_spi = 0;

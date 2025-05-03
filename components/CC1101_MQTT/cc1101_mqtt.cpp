@@ -24,6 +24,7 @@ void cc1101_mqtt::setup() {
     ESP_LOGCONFIG(TAG, "CC1101 SPI failed");
     m_spi = 2;
   }
+  m_time = millis();
 }
 
 void cc1101_mqtt::loop() {
@@ -34,11 +35,13 @@ void cc1101_mqtt::loop() {
     m_change++;    
   }
 
-  if (m_count % 1000 == 0) {
-    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi: %d changes: %d", m_count, m_spi, m_change);
+  uint32_t time = millis();
+  if (time - m_time > 1000) {
+    m_time = time;
+
+    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi_status: %d changes: %d", m_time, m_spi, m_change);
     m_change = 0;
   }
-  m_count++;
 }
 
 void cc1101_mqtt::dump_config() {
