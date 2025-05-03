@@ -29,13 +29,11 @@ public:
         this->m_miso = miso;
         this->m_mosi = mosi;
         this->m_ss = ss;
-        ELECHOUSE_cc1101.setSpiPin(sck, miso, mosi, ss);
         m_tConfig = millis();
     }
 
     void set_tx(uint8_t tx) {
         this->m_gdo0 = tx;
-        ELECHOUSE_cc1101.setGDO0(m_gdo0);
     }
 
     void set_rx(uint8_t rx) {
