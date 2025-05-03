@@ -3,7 +3,7 @@
 using namespace esphome;
 using namespace esphome::cc1101;
 
-static const char *TAG = "cc1101_mqtt.sensor";
+static const char *TAG = "cc1101_mqtt.component";
 
 void cc1101_mqtt::setup() {
   ESP_LOGCONFIG(TAG, "Setting up CC1101 SPI...");
@@ -25,7 +25,8 @@ void cc1101_mqtt::setup() {
 }
 
 void cc1101_mqtt::loop() {
-  
+  ESP_LOGCONFIG(TAG, "CC1101 %d", m_count);
+  m_count++;
 }
 
 void cc1101_mqtt::dump_config() {
