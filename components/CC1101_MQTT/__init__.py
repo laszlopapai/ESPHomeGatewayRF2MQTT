@@ -14,7 +14,7 @@ DEPENDENCIES = ["spi"]
 
 empty_spi_component_ns = cg.esphome_ns.namespace("cc1101")
 EmptySPIComponent = empty_spi_component_ns.class_(
-    "cc1101_mqtt"#, cg.Component, spi.SPIDevice
+    "cc1101_mqtt", cg.Component#, spi.SPIDevice
 )
 
 CONFIG_SCHEMA = (
