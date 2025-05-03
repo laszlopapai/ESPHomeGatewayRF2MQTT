@@ -1,5 +1,5 @@
 #include "cc1101_mqtt.h"
-#include <pair>
+#include <utility>
 #include <string>
 
 using namespace esphome;
