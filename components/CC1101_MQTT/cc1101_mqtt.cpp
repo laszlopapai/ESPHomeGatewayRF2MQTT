@@ -14,8 +14,14 @@ void cc1101_mqtt::setup() {
   ESP_LOGCONFIG(TAG, "SPI SS: %d", (uint32_t)m_ss);
   ESP_LOGCONFIG(TAG, "GDO0: %d", (uint32_t)m_gdo0);
   ESP_LOGCONFIG(TAG, "GDO2: %d", (uint32_t)m_gdo2);
-  // Initialize SPI pins
-  m_sck = 0;
+
+  if (dev.getCC1101()) {
+    ESP_LOGE(TAG, "CC1101 SPI success");
+  }
+  else{
+    ESP_LOGE(TAG, "CC1101 SPI failed");
+  }
+  ELECHOUSE_cc1101.Init();
 }
 
 void cc1101_mqtt::loop() {
