@@ -1,4 +1,6 @@
 #include "cc1101_mqtt.h"
+#include <pair>
+#include <string>
 
 using namespace esphome;
 using namespace esphome::cc1101;
@@ -17,30 +19,44 @@ void cc1101_mqtt::setup() {
   if (m_device.getCC1101()) {
     ESP_LOGCONFIG(TAG, "CC1101 SPI success");
     m_spi = 1;
-    m_device.Init();
-    m_device.SetRx();
   }
   else {
     ESP_LOGCONFIG(TAG, "CC1101 SPI failed");
     m_spi = 2;
   }
+  m_device.Init();
+  m_device.SetRx();
   m_time = millis();
 }
 
 void cc1101_mqtt::loop() {
+  uint32_t time = millis();
+  uint32_t tDiff = time - m_time;
 
   bool state = pin_->digital_read();
   if (state != m_state) {
+    m_pulseIndices.push_back(tDiff);
+
+
+
+    m_change++;
+    m_stateTime = time;
     m_state = state;
-    m_change++;    
   }
 
-  uint32_t time = millis();
   if (time - m_time >= 1000) {
     m_time = time;
 
-    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi_status: %d changes: %d", m_time, m_spi, m_change);
+
+    std:string pulses = "Pulses: ";
+    for (auto pulse : m_pulseIndices) {
+      pulses += std::to_string(pulse) + " ";
+    }
+
+    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi_status: %d changes: %d %s", m_time, m_spi, m_change, pulses);
     m_change = 0;
+    m_pulseIndices.clear();
+    m_pulseLengths.clear();
   }
 }
 

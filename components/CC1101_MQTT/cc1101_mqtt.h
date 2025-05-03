@@ -1,5 +1,7 @@
 #pragma once
 
+#include <set>
+#include <vector>
 #include "cc1101.h"
 #include "esphome/core/component.h"
 #include "esphome/components/spi/spi.h"
@@ -50,9 +52,15 @@ private:
     uint32_t m_time = 0;
 
     uint32_t m_change = 0;
+    
     bool m_state = false;
+    uint32_t m_stateTime = 0;
+
     uint32_t m_spi = 0;
     GPIOPin *pin_;
+
+    std::set<uint8_t> m_pulseLengths;
+    std::vector<uint8_t> m_pulseIndices;
 
     ELECHOUSE_CC1101 m_device;
 };
