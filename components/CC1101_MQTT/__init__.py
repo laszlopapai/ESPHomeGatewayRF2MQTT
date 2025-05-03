@@ -20,10 +20,10 @@ EmptySPIComponent = empty_spi_component_ns.class_(
 CONFIG_SCHEMA = (
     cv.Schema({
         cv.GenerateID(): cv.declare_id(EmptySPIComponent),
-#        cv.Required(CONF_SS): cv.int_range(min=0, max=20),
-#        cv.Required(CONF_CLK): cv.int_range(min=0, max=20),
-#        cv.Required(CONF_MOSI): cv.int_range(min=0, max=20),
-#        cv.Required(CONF_MISO): cv.int_range(min=0, max=20),
+        cv.Required(CONF_SS): cv.int_range(min=0, max=20),
+        cv.Required(CONF_CLK): cv.int_range(min=0, max=20),
+        cv.Required(CONF_MOSI): cv.int_range(min=0, max=20),
+        cv.Required(CONF_MISO): cv.int_range(min=0, max=20),
         cv.Optional(CONF_RX): cv.int_range(min=0, max=20),
         cv.Optional(CONF_TX): cv.int_range(min=0, max=20)
 
@@ -39,7 +39,7 @@ async def to_code(config):
     await cg.register_component(var, config)
     await spi.register_spi_device(var, config)
 
-#    cg.add(var.set_spi(config[CONF_CLK], config[CONF_MOSI], config[CONF_MISO], config[CONF_SS]))
+    cg.add(var.set_spi(config[CONF_CLK], config[CONF_MOSI], config[CONF_MISO], config[CONF_SS]))
     
     if CONF_RX in config:
         cg.add(var.set_rx(config[CONF_RX]))
