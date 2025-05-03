@@ -2,7 +2,11 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import spi
 from esphome import pins
-from esphome.const import CONF_ID, CONF_PIN
+from esphome.const import (
+    CONF_ID,
+    CONF_PIN,
+    CONF_CS_PIN
+)
 
 CONF_SS = "ss_pin"
 CONF_CLK = "clk_pin"
@@ -40,7 +44,7 @@ async def to_code(config):
     await cg.register_component(var, config)
     await spi.register_spi_device(var, config)
 
-    cg.add(var.set_spi(config[CONF_CLK], config[CONF_MOSI], config[CONF_MISO], config[CONF_SS]))
+    cg.add(var.set_spi(config[CONF_CLK], config[CONF_MOSI], config[CONF_MISO], config[CONF_CS_PIN]))
     
     pin = await cg.gpio_pin_expression(config[CONF_PIN])
     cg.add(var.set_pin(pin))
