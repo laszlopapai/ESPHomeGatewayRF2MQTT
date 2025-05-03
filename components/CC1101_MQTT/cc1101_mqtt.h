@@ -30,11 +30,12 @@ public:
         this->m_mosi = mosi;
         this->m_ss = ss;
         ELECHOUSE_cc1101.setSpiPin(sck, miso, mosi, ss);
-        ELECHOUSE_cc1101.setGDO0(m_gdo0);
+        m_tConfig = millis();
     }
 
     void set_tx(uint8_t tx) {
         this->m_gdo0 = tx;
+        ELECHOUSE_cc1101.setGDO0(m_gdo0);
     }
 
     void set_rx(uint8_t rx) {
@@ -63,6 +64,9 @@ private:
     std::vector<uint8_t> m_pulseIndices;
 
     ELECHOUSE_CC1101 m_device;
+    
+    uint32_t m_tSetup = 0;
+    uint32_t m_tConfig = 0;
 };
 
 }

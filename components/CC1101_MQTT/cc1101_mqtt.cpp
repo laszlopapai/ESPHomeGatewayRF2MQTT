@@ -16,6 +16,7 @@ void cc1101_mqtt::setup() {
   ESP_LOGCONFIG(TAG, "GDO0: %d", (uint32_t)m_gdo0);
   ESP_LOGCONFIG(TAG, "GDO2: %d", (uint32_t)m_gdo2);
 
+  m_tSetup = millis();
   if (ELECHOUSE_cc1101.getCC1101()) {
     ESP_LOGCONFIG(TAG, "CC1101 SPI success");
     m_spi = 1;
@@ -53,7 +54,7 @@ void cc1101_mqtt::loop() {
       pulses += std::to_string(pulse) + " ";
     }
 
-    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi_status: %d changes: %d %s", m_time, m_spi, m_change, pulses.c_str());
+    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi_status: %d ts: %d tc: %d changes: %d %s", m_time, m_spi, m_tSetup, m_tConfig, m_change, pulses.c_str());
     m_change = 0;
     m_pulseIndices.clear();
     m_pulseLengths.clear();
