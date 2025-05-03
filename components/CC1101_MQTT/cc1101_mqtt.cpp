@@ -53,7 +53,7 @@ void cc1101_mqtt::loop() {
       pulses += std::to_string(pulse) + " ";
     }
 
-    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi_status: %d changes: %d %s", m_time, m_spi, m_change, pulses);
+    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi_status: %d changes: %d %s", m_time, m_spi, m_change, pulses.c_str());
     m_change = 0;
     m_pulseIndices.clear();
     m_pulseLengths.clear();
