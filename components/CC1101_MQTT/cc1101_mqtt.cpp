@@ -6,7 +6,6 @@ using namespace esphome::cc1101;
 static const char *TAG = "cc1101_mqtt.sensor";
 
 void cc1101_mqtt::setup() {
-  ESP_LOGE(TAG, "Setting up CC1101");
   ESP_LOGCONFIG(TAG, "Setting up CC1101 SPI...");
   ESP_LOGCONFIG(TAG, "SPI SCK: %d", (uint32_t)m_sck);
   ESP_LOGCONFIG(TAG, "SPI MISO: %d", (uint32_t)m_miso);
@@ -16,12 +15,13 @@ void cc1101_mqtt::setup() {
   ESP_LOGCONFIG(TAG, "GDO2: %d", (uint32_t)m_gdo2);
 
   if (ELECHOUSE_cc1101.getCC1101()) {
-    ESP_LOGE(TAG, "CC1101 SPI success");
+    ESP_LOGCONFIG(TAG, "CC1101 SPI success");
   }
   else{
-    ESP_LOGE(TAG, "CC1101 SPI failed");
+    ESP_LOGCONFIG(TAG, "CC1101 SPI failed");
   }
   ELECHOUSE_cc1101.Init();
+  ELECHOUSE_cc1101.SetRx();
 }
 
 void cc1101_mqtt::loop() {
