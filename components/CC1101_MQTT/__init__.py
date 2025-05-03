@@ -19,7 +19,7 @@ EmptySPIComponent = empty_spi_component_ns.class_(
 
 CONFIG_SCHEMA = (
     cv.Schema({
-        cv.GenerateID(): cv.declare_id(EmptySPIComponent),
+        #cv.GenerateID(): cv.declare_id(EmptySPIComponent),
         cv.Required(CONF_SS): cv.int_range(min=0, max=20),
         cv.Required(CONF_CLK): cv.int_range(min=0, max=20),
         cv.Required(CONF_MOSI): cv.int_range(min=0, max=20),
