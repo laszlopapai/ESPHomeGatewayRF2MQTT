@@ -1,5 +1,6 @@
 #pragma once
 
+#include "cc1101.h"
 #include "esphome/core/component.h"
 #include "esphome/components/spi/spi.h"
 //#include "esphome/components/mqtt/custom_mqtt_device.h"
@@ -24,6 +25,7 @@ public:
         this->m_miso = miso;
         this->m_mosi = mosi;
         this->m_ss = ss;
+        ELECHOUSE_cc1101.setSpiPin(sck, miso, mosi, ss);
     }
 
     void set_tx(uint8_t tx) {
