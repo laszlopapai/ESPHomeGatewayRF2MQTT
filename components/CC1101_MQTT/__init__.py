@@ -25,12 +25,12 @@ EmptySPIComponent = empty_spi_component_ns.class_(
 CONFIG_SCHEMA = (
     cv.Schema({
         cv.GenerateID(): cv.declare_id(EmptySPIComponent),
-        cv.Required(CONF_SS): cv.int_range(min=0, max=20),
-        cv.Required(CONF_CLK): cv.int_range(min=0, max=20),
-        cv.Required(CONF_MOSI): cv.int_range(min=0, max=20),
-        cv.Required(CONF_MISO): cv.int_range(min=0, max=20),
-        cv.Optional(CONF_RX): cv.int_range(min=0, max=20),
-        cv.Optional(CONF_TX): cv.int_range(min=0, max=20),
+        cv.Required(CONF_SS): cv.int_range(min=0, max=50),
+        cv.Required(CONF_CLK): cv.int_range(min=0, max=50),
+        cv.Required(CONF_MOSI): cv.int_range(min=0, max=50),
+        cv.Required(CONF_MISO): cv.int_range(min=0, max=50),
+        cv.Optional(CONF_RX): cv.int_range(min=0, max=50),
+        cv.Optional(CONF_TX): cv.int_range(min=0, max=50),
         cv.Required(CONF_PIN): pins.gpio_input_pin_schema
 #        cv.Optional("test", default = "0.5"): cv.positive_not_null_float
     })

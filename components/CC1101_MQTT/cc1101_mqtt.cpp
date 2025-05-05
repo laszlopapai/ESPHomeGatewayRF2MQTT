@@ -29,6 +29,10 @@ void cc1101_mqtt::setup() {
   }
   ELECHOUSE_cc1101.Init();
   ELECHOUSE_cc1101.SetRx();
+
+  m_rcswitch.enableReceive(m_gdo2);
+  m_rcswitch.enableTransmit(m_gdo0);
+
   m_time = millis();
 }
 
@@ -60,6 +64,19 @@ void cc1101_mqtt::loop() {
     m_change = 0;
     m_pulseIndices.clear();
     m_pulseLengths.clear();
+  }
+
+  if (m_rcswitch.available()){
+    
+    Serial.print("Received ");
+    Serial.print( m_rcswitch.getReceivedValue() );
+    Serial.print(" / ");
+    Serial.print( m_rcswitch.getReceivedBitlength() );
+    Serial.print("bit ");
+    Serial.print("Protocol: ");
+    Serial.println( m_rcswitch.getReceivedProtocol() );
+
+    m_rcswitch.resetAvailable();
   }
 }
 

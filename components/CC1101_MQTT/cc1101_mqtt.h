@@ -5,6 +5,7 @@
 #include "cc1101.h"
 #include "esphome/core/component.h"
 #include "esphome/components/spi/spi.h"
+#include "RCSwitch.h"
 //#include "esphome/components/mqtt/custom_mqtt_device.h"
 
 namespace esphome {
@@ -65,6 +66,8 @@ private:
     
     uint32_t m_tSetup = 0;
     uint32_t m_tConfig = 0;
+
+    RCSwitch m_rcswitch;
 };
 
 }
