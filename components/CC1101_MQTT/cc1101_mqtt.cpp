@@ -68,13 +68,11 @@ void cc1101_mqtt::loop() {
 
   if (m_rcswitch.available()){
     
-    Serial.print("Received ");
-    Serial.print( m_rcswitch.getReceivedValue() );
-    Serial.print(" / ");
-    Serial.print( m_rcswitch.getReceivedBitlength() );
-    Serial.print("bit ");
-    Serial.print("Protocol: ");
-    Serial.println( m_rcswitch.getReceivedProtocol() );
+    ESP_LOGCONFIG("Received %d / %dbit Protocol: %d",
+      m_rcswitch.getReceivedValue(),
+      m_rcswitch.getReceivedBitlength(),
+      m_rcswitch.getReceivedProtocol()
+    );
 
     m_rcswitch.resetAvailable();
   }
