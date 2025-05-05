@@ -68,7 +68,7 @@ void cc1101_mqtt::loop() {
 
   if (m_rcswitch.available()){
     
-    ESP_LOGCONFIG("Received %d / %dbit Protocol: %d",
+    ESP_LOGCONFIG(TAG, "Received %d / %dbit Protocol: %d",
       m_rcswitch.getReceivedValue(),
       m_rcswitch.getReceivedBitlength(),
       m_rcswitch.getReceivedProtocol()
