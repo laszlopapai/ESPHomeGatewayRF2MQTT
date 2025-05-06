@@ -28,11 +28,12 @@ void cc1101_mqtt::setup() {
     m_spi = 2;
   }
   ELECHOUSE_cc1101.Init();
-  ELECHOUSE_cc1101.SetRx();
 
   m_rcswitch.enableReceive(m_gdo2);
   m_rcswitch.enableTransmit(m_gdo0);
 
+  ELECHOUSE_cc1101.SetRx();
+  
   m_time = millis();
 }
 
