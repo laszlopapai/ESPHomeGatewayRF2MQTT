@@ -40,6 +40,8 @@ public:
     void set_gdo2(uint8_t gdo2) {
         this->m_gdo2 = gdo2;
     }
+    
+    float get_setup_priority() const override { return setup_priority::HARDWARE; }
 
 private:
     uint8_t m_ss;
