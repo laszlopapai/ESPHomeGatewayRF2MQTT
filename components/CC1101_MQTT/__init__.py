@@ -12,8 +12,8 @@ CONF_SS = "ss_pin"
 CONF_CLK = "clk_pin"
 CONF_MOSI = "mosi_pin"
 CONF_MISO = "miso_pin"
-CONF_RX = "rx_pin"
-CONF_TX = "tx_pin"
+CONF_GDO0 = "GDO0_pin"
+CONF_GDO2 = "GDO2_pin"
 
 DEPENDENCIES = ["spi"]
 
@@ -29,8 +29,8 @@ CONFIG_SCHEMA = (
         cv.Required(CONF_CLK): cv.int_range(min=0, max=50),
         cv.Required(CONF_MOSI): cv.int_range(min=0, max=50),
         cv.Required(CONF_MISO): cv.int_range(min=0, max=50),
-        cv.Optional(CONF_RX): cv.int_range(min=0, max=50),
-        cv.Optional(CONF_TX): cv.int_range(min=0, max=50),
+        cv.Optional(CONF_GDO0): cv.int_range(min=0, max=50),
+        cv.Optional(CONF_GDO2): cv.int_range(min=0, max=50),
         cv.Required(CONF_PIN): pins.gpio_input_pin_schema
 #        cv.Optional("test", default = "0.5"): cv.positive_not_null_float
     })
@@ -49,10 +49,10 @@ async def to_code(config):
     pin = await cg.gpio_pin_expression(config[CONF_PIN])
     cg.add(var.set_pin(pin))
 
-    if CONF_RX in config:
-        cg.add(var.set_rx(config[CONF_RX]))
+    if CONF_GDO0 in config:
+        cg.add(var.set_gdo0(config[CONF_GDO0]))
         cg.add_define("USE_RX")
 
-    if CONF_TX in config:
-        cg.add(var.set_tx(config[CONF_TX]))
+    if CONF_GDO2 in config:
+        cg.add(var.set_gdo2(config[CONF_GDO2]))
         cg.add_define("USE_TX")

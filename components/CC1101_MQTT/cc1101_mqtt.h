@@ -33,12 +33,12 @@ public:
         m_tConfig = millis();
     }
 
-    void set_tx(uint8_t tx) {
-        this->m_gdo0 = tx;
+    void set_gdo0(uint8_t tgdo0) {
+        this->m_gdo0 = gdo0;
     }
 
-    void set_rx(uint8_t rx) {
-        this->m_gdo2 = rx;
+    void set_gdo2(uint8_t gdo2) {
+        this->m_gdo2 = gdo2;
     }
 
 private:
