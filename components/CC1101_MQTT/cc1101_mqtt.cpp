@@ -18,7 +18,7 @@ void cc1101_mqtt::setup() {
 
   m_tSetup = millis();
   ELECHOUSE_cc1101.setSpiPin(m_sck, m_miso, m_mosi, m_ss);
-  //ELECHOUSE_cc1101.setGDO0(m_gdo0);
+  ELECHOUSE_cc1101.setGDO0(m_gdo0);
   if (ELECHOUSE_cc1101.getCC1101()) {
     ESP_LOGCONFIG(TAG, "CC1101 SPI success");
     m_spi = 1;
