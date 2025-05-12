@@ -66,7 +66,8 @@ void cc1101_mqtt::loop() {
   // Mode change
   if (time - m_lastModeChangeTime > 5000) {
     m_lastModeChangeTime = time;
-    m_receiveMode = !m_receiveMode;
+    //m_receiveMode = !m_receiveMode;
+    m_receiveMode = true; // Always RX mode for now
     if (m_receiveMode) {
       ESP_LOGCONFIG(TAG, "CC1101 RX mode");
       ELECHOUSE_cc1101.SetRx();
