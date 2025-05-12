@@ -49,12 +49,14 @@ private:
     uint8_t m_gdo0;
     uint8_t m_gdo2;
 
-    uint32_t m_time = 0;
-
-    uint32_t m_change = 0;
+    uint32_t m_lastPulseDumpTime = 0;
+    uint32_t m_lastPulseTime = 0;
+    bool m_lastPinState = false;
+    uint32_t m_lastModeChangeTime = 0;
+    bool m_receiveMode = true;
+    uint32_t m_lastTransmitTime = 0;
+    uint8_t m_transmitRepeats = 0;
     
-    bool m_state = false;
-    uint32_t m_stateTime = 0;
 
     uint32_t m_spi = 0;
     GPIOPin *pin_;

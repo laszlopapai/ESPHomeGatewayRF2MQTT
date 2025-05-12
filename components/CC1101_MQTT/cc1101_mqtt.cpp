@@ -34,41 +34,51 @@ void cc1101_mqtt::setup() {
 
   ELECHOUSE_cc1101.SetRx();
   
-  m_time = millis();
+  m_lastTransmitTime = m_lastModeChangeTime = m_lastPulseTime = m_lastPulseDumpTime = millis();
 }
 
 void cc1101_mqtt::loop() {
   uint32_t time = millis();
-  uint32_t tDiff = time - m_time;
 
   bool state = pin_->digital_read();
-  if (state != m_state) {
-    m_pulseIndices.push_back(tDiff);
 
-
-
-    m_change++;
-    m_stateTime = time;
-    m_state = state;
+  // Mode change
+  if (time - m_lastModeChangeTime > 5000) {
+    m_lastModeChangeTime = time;
+    m_receiveMode = !m_receiveMode;
+    if (m_receiveMode) {
+      ESP_LOGCONFIG(TAG, "CC1101 RX mode");
+      ELECHOUSE_cc1101.SetRx();
+    } else {
+      ESP_LOGCONFIG(TAG, "CC1101 TX mode");
+      ELECHOUSE_cc1101.SetTx();
+    }
   }
 
-  if (time - m_time >= 1000) {
-    m_time = time;
+  // Record pulse lengths
+  if (m_receiveMode && state != m_lastPinState) {
+    m_pulseIndices.push_back(time - m_lastPulseTime);
+    m_change++;
+    m_lastPulseTime = time;
+    m_lastPinState = state;
+  }
 
+  // Dump pulse lengths
+  if (m_receiveMode && time - m_lastPulseDumpTime >= 1000) {
+    m_lastPulseDumpTime = time;
 
     std::string pulses = "Pulses: ";
     for (auto pulse : m_pulseIndices) {
       pulses += std::to_string(pulse) + " ";
     }
 
-    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi_status: %d ts: %d tc: %d changes: %d %s", m_time, m_spi, m_tSetup, m_tConfig, m_change, pulses.c_str());
-    m_change = 0;
+    ESP_LOGCONFIG(TAG, "CC1101 loop %d spi_status: %d ts: %d tc: %d changes: %d %s", m_time, m_spi, m_tSetup, m_tConfig, pulses.length(), pulses.c_str());
     m_pulseIndices.clear();
     m_pulseLengths.clear();
   }
 
-  if (m_rcswitch.available()){
-    
+  // Receive data
+  if (m_receiveMode && m_rcswitch.available()) {    
     ESP_LOGCONFIG(TAG, "Received %d / %dbit Protocol: %d",
       m_rcswitch.getReceivedValue(),
       m_rcswitch.getReceivedBitlength(),
@@ -76,6 +86,26 @@ void cc1101_mqtt::loop() {
     );
 
     m_rcswitch.resetAvailable();
+  }
+
+  // Transmit data
+  if (!m_receiveMode && time - m_lastTransmitTime > 1000) {
+    m_lastTransmitTime = time;
+
+    if (m_transmitRepeats > 2) {
+      m_transmitRepeats++;
+      m_rcswitch.send(13982723, 24);
+      ESP_LOGCONFIG(TAG, "Transmitted 13982723 Off");
+    }
+    else {
+      m_transmitRepeats++;
+      m_rcswitch.send(13982732, 24);
+      ESP_LOGCONFIG(TAG, "Transmitted 13982732 On");
+    }
+
+    if (m_transmitRepeats > 5) {
+      m_transmitRepeats = 0;
+    }
   }
 }
 
