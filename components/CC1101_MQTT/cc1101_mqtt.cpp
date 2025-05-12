@@ -18,7 +18,7 @@ void cc1101_mqtt::setup() {
 
   m_tSetup = millis();
   ELECHOUSE_cc1101.setSpiPin(m_sck, m_miso, m_mosi, m_ss);
-  ELECHOUSE_cc1101.setGDO0(m_gdo0);
+  //ELECHOUSE_cc1101.setGDO0(m_gdo0);
   if (ELECHOUSE_cc1101.getCC1101()) {
     ESP_LOGCONFIG(TAG, "CC1101 SPI success");
     m_spi = 1;
@@ -29,7 +29,7 @@ void cc1101_mqtt::setup() {
   }
   ELECHOUSE_cc1101.Init();
 
-  m_rcswitch.enableReceive(m_gdo2);
+  //m_rcswitch.enableReceive(m_gdo2);
   m_rcswitch.enableTransmit(m_gdo0);
 
   ELECHOUSE_cc1101.SetRx();
@@ -42,22 +42,9 @@ void cc1101_mqtt::loop() {
 
   bool state = pin_->digital_read();
 
-  // Mode change
-  if (time - m_lastModeChangeTime > 5000) {
-    m_lastModeChangeTime = time;
-    m_receiveMode = !m_receiveMode;
-    if (m_receiveMode) {
-      ESP_LOGCONFIG(TAG, "CC1101 RX mode");
-      ELECHOUSE_cc1101.SetRx();
-    } else {
-      ESP_LOGCONFIG(TAG, "CC1101 TX mode");
-      ELECHOUSE_cc1101.SetTx();
-    }
-  }
-
   // Record pulse lengths
   if (m_receiveMode && state != m_lastPinState) {
-    m_pulseIndices.push_back(time - m_lastPulseTime);
+    m_pulseLengths.push_back(time - m_lastPulseTime);
     m_lastPulseTime = time;
     m_lastPinState = state;
   }
@@ -67,13 +54,27 @@ void cc1101_mqtt::loop() {
     m_lastPulseDumpTime = time;
 
     std::string pulses = "Pulses: ";
-    for (auto pulse : m_pulseIndices) {
+    for (auto pulse : m_pulseLengths) {
       pulses += std::to_string(pulse) + " ";
     }
 
-    ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d ts: %d tc: %d changes: %d %s", m_spi, m_tSetup, m_tConfig, pulses.length(), pulses.c_str());
+    ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d ts: %d tc: %d changes: %d %s", m_spi, m_tSetup, m_tConfig, m_pulseLengths.length(), pulses.c_str());
     m_pulseIndices.clear();
     m_pulseLengths.clear();
+  }
+
+  // Mode change
+  if (time - m_lastModeChangeTime > 5000) {
+    m_lastModeChangeTime = time;
+    //m_receiveMode = !m_receiveMode;
+    m_receiveMode = false;
+    if (m_receiveMode) {
+      ESP_LOGCONFIG(TAG, "CC1101 RX mode");
+      ELECHOUSE_cc1101.SetRx();
+    } else {
+      ESP_LOGCONFIG(TAG, "CC1101 TX mode");
+      ELECHOUSE_cc1101.SetTx();
+    }
   }
 
   // Receive data
