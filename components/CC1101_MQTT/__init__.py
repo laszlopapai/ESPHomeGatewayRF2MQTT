@@ -7,6 +7,7 @@ from esphome.const import (
     CONF_PIN,
     CONF_CS_PIN
 )
+from esphome.core import coroutine_with_priority
 
 CONF_SS = "ss_pin"
 CONF_CLK = "clk_pin"
@@ -38,7 +39,7 @@ CONFIG_SCHEMA = (
     .extend(spi.spi_device_schema(cs_pin_required=True))
 )
 
-
+@coroutine_with_priority(1.0)
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
