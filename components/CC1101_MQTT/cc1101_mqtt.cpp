@@ -29,7 +29,7 @@ void cc1101_mqtt::setup() {
   }
   ELECHOUSE_cc1101.Init();
 
-  //m_rcswitch.enableReceive(m_gdo2);
+  m_rcswitch.enableReceive(m_gdo2);
   m_rcswitch.enableTransmit(m_gdo0);
 
   ELECHOUSE_cc1101.SetRx();
