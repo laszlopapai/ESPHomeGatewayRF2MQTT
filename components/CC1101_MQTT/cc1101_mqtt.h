@@ -33,7 +33,7 @@ public:
         m_tConfig = millis();
     }
 
-    void set_gdo0(uint8_t tgdo0) {
+    void set_gdo0(uint8_t gdo0) {
         this->m_gdo0 = gdo0;
     }
 
