@@ -58,7 +58,6 @@ void cc1101_mqtt::loop() {
   // Record pulse lengths
   if (m_receiveMode && state != m_lastPinState) {
     m_pulseIndices.push_back(time - m_lastPulseTime);
-    m_change++;
     m_lastPulseTime = time;
     m_lastPinState = state;
   }
