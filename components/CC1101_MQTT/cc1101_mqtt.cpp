@@ -44,7 +44,7 @@ void cc1101_mqtt::loop() {
 
   // Record pulse lengths
   if (m_receiveMode && state != m_lastPinState) {
-    m_pulseLengths.push_back(time - m_lastPulseTime);
+    m_pulseIndices.push_back(time - m_lastPulseTime);
     m_lastPulseTime = time;
     m_lastPinState = state;
   }
@@ -54,11 +54,11 @@ void cc1101_mqtt::loop() {
     m_lastPulseDumpTime = time;
 
     std::string pulses = "Pulses: ";
-    for (auto pulse : m_pulseLengths) {
+    for (auto pulse : m_pulseIndices) {
       pulses += std::to_string(pulse) + " ";
     }
 
-    ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d ts: %d tc: %d changes: %d %s", m_spi, m_tSetup, m_tConfig, m_pulseLengths.length(), pulses.c_str());
+    ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d ts: %d tc: %d changes: %d %s", m_spi, m_tSetup, m_tConfig, m_pulseIndices.length(), pulses.c_str());
     m_pulseIndices.clear();
     m_pulseLengths.clear();
   }
