@@ -23,7 +23,7 @@ Status Radio::begin(Modulation mod, double freq, double drate) {
   #else
   SPI.begin();
   #endif
-
+/*
   hardReset();
   delay(10);
 
@@ -51,7 +51,7 @@ Status Radio::begin(Modulation mod, double freq, double drate) {
   setState(STATE_IDLE);
   flushRxBuffer();
   flushTxBuffer();
-
+*/
   return STATUS_OK;
 }
 
