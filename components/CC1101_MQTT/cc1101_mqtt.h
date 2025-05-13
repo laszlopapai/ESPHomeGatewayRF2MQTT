@@ -61,7 +61,7 @@ private:
     uint8_t m_transmitRepeats = 0;
     
 
-    uint32_t m_spi = 1000;
+    uint32_t m_spi = (uint32_t)(-1);
     GPIOPin *pin_;
 
     std::set<uint8_t> m_pulseLengths;

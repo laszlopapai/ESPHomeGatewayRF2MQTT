@@ -34,7 +34,7 @@ void cc1101_mqtt::setup() {
     m_spi = (uint32_t)s;
   }
   else {
-    m_spi = (uint32_t)(-1);
+    m_spi = 0;
   }
 
 /*
@@ -54,7 +54,7 @@ void cc1101_mqtt::setup() {
   m_rcswitch.enableReceive(m_gdo2);
   m_rcswitch.enableTransmit(m_gdo0);
 
-//  ELECHOUSE_cc1101.SetRx();
+  ELECHOUSE_cc1101.SetRx();
   //m_radio->setState(CC1101_dev::STATE_RX);
   
   m_lastTransmitTime = m_lastModeChangeTime = m_lastPulseTime = m_lastPulseDumpTime = millis();
