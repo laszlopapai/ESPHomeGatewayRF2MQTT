@@ -45,7 +45,7 @@ async def to_code(config):
     await cg.register_component(var, config)
     await spi.register_spi_device(var, config)
 
-    cg.add(var.set_spi(config[CONF_CLK], config[CONF_MOSI], config[CONF_MISO], config[CONF_SS]))
+    cg.add(var.set_spi(config[CONF_CLK], config[CONF_MISO], config[CONF_MOSI], config[CONF_SS]))
     
     pin = await cg.gpio_pin_expression(config[CONF_PIN])
     cg.add(var.set_pin(pin))
