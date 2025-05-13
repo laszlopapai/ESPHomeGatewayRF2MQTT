@@ -6,7 +6,7 @@ using namespace CC1101_dev;
 
 Status Radio::begin(Modulation mod, double freq, double drate) {
   Status status;
-/*
+
   pinMode(cs, OUTPUT);
 
   if (gd0 != PIN_UNUSED) {
@@ -51,7 +51,7 @@ Status Radio::begin(Modulation mod, double freq, double drate) {
   setState(STATE_IDLE);
   flushRxBuffer();
   flushTxBuffer();
-*/
+
   return STATUS_OK;
 }
 
