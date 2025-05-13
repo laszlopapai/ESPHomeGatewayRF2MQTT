@@ -3,6 +3,7 @@
 #include <set>
 #include <vector>
 #include "cc1101.h"
+#include "cc1101_dev.h"
 #include "esphome/core/component.h"
 #include "esphome/components/spi/spi.h"
 #include "RCSwitch.h"
@@ -60,13 +61,14 @@ private:
     uint8_t m_transmitRepeats = 0;
     
 
-    uint32_t m_spi = 0;
+    uint32_t m_spi = 1000;
     GPIOPin *pin_;
 
     std::set<uint8_t> m_pulseLengths;
     std::vector<uint8_t> m_pulseIndices;
 
     ELECHOUSE_CC1101 m_device;
+    CC1101_dev::Radio *m_radio
     
     uint32_t m_tSetup = 0;
     uint32_t m_tConfig = 0;
