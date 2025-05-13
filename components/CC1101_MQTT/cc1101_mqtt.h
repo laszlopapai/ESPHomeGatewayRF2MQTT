@@ -64,7 +64,8 @@ private:
     uint32_t m_spi = (uint32_t)(-1);
     GPIOPin *pin_;
 
-    std::set<uint8_t> m_pulseLengths;
+    std::set<uint8_t> m_pulseLengthSet;
+    std::vector<uint8_t> m_pulseLengthList;
     std::vector<uint8_t> m_pulseIndices;
 
     ELECHOUSE_CC1101 m_device;
