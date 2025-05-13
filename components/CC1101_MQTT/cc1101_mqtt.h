@@ -40,7 +40,7 @@ public:
     void set_gdo2(uint8_t gdo2) {
         this->m_gdo2 = gdo2;
     }
-    
+
     float get_setup_priority() const override { return setup_priority::HARDWARE; }
 
 private:
@@ -70,6 +70,7 @@ private:
     
     uint32_t m_tSetup = 0;
     uint32_t m_tConfig = 0;
+    bool m_esp32 = false;
 
     RCSwitch m_rcswitch;
 };
