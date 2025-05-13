@@ -16,6 +16,12 @@ void cc1101_mqtt::setup() {
   ESP_LOGCONFIG(TAG, "GDO0: %d", (uint32_t)m_gdo0);
   ESP_LOGCONFIG(TAG, "GDO2: %d", (uint32_t)m_gdo2);
 
+  #ifdef ESP32
+  ESP_LOGCONFIG(TAG, "ESP32 DEF");
+  #else
+  ESP_LOGCONFIG(TAG, "ESP32 NDEF");
+  #endif
+
   m_tSetup = millis();
   ELECHOUSE_cc1101.setSpiPin(m_sck, m_miso, m_mosi, m_ss);
   ELECHOUSE_cc1101.setGDO(m_gdo0, m_gdo2);
