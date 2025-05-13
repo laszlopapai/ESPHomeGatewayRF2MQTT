@@ -3,6 +3,8 @@
         "string": "cpp",
         "vector": "cpp",
         "xstring": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "initializer_list": "cpp",
+        "xutility": "cpp"
     }
 }
