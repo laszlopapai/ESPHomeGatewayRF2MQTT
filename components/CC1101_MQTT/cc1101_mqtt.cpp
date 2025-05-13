@@ -43,18 +43,18 @@ void cc1101_mqtt::setup() {
 
   if (ELECHOUSE_cc1101.getCC1101()) {
     ESP_LOGCONFIG(TAG, "CC1101 SPI success");
-    m_spi = 1;
+    m_spi = 0;
   }
   else {
     ESP_LOGCONFIG(TAG, "CC1101 SPI failed");
-    m_spi = 2;
+    m_spi = 1;
   }
   ELECHOUSE_cc1101.Init();
 
   m_rcswitch.enableReceive(m_gdo2);
   m_rcswitch.enableTransmit(m_gdo0);
 
-  if (s == CC1101_dev::STATUS_OK) {
+  if (m_spi == CC1101_dev::STATUS_OK) {
     ELECHOUSE_cc1101.SetRx();
     //m_radio->setState(CC1101_dev::STATE_RX);
   }
