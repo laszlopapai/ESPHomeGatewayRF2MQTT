@@ -27,7 +27,7 @@ void cc1101_mqtt::setup() {
   #define READ_BURST 0xC0      // read burst
 
   m_tSetup = millis();
-
+/*
   this->m_radio = new CC1101_dev::Radio(m_ss, m_sck, m_miso, m_mosi, m_gdo0, m_gdo2);
   CC1101_dev::Status s = this->m_radio->begin();
   if (s != CC1101_dev::STATUS_OK) {
@@ -36,8 +36,8 @@ void cc1101_mqtt::setup() {
   else {
     m_spi = 0;
   }
+*/
 
-/*
   ELECHOUSE_cc1101.setSpiPin(m_sck, m_miso, m_mosi, m_ss);
   ELECHOUSE_cc1101.setGDO(m_gdo0, m_gdo2);
 
@@ -49,14 +49,14 @@ void cc1101_mqtt::setup() {
     ESP_LOGCONFIG(TAG, "CC1101 SPI failed");
     m_spi = 2;
   }
-  ELECHOUSE_cc1101.Init();*/
+  ELECHOUSE_cc1101.Init();
 
   m_rcswitch.enableReceive(m_gdo2);
   m_rcswitch.enableTransmit(m_gdo0);
 
   if (s == CC1101_dev::STATUS_OK) {
-    //ELECHOUSE_cc1101.SetRx();
-    m_radio->setState(CC1101_dev::STATE_RX);
+    ELECHOUSE_cc1101.SetRx();
+    //m_radio->setState(CC1101_dev::STATE_RX);
   }
   
   m_lastTransmitTime = m_lastModeChangeTime = m_lastPulseTime = m_lastPulseDumpTime = millis();
