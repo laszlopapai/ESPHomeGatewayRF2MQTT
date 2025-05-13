@@ -68,7 +68,7 @@ private:
     std::vector<uint8_t> m_pulseIndices;
 
     ELECHOUSE_CC1101 m_device;
-    CC1101_dev::Radio *m_radio
+    CC1101_dev::Radio *m_radio;
     
     uint32_t m_tSetup = 0;
     uint32_t m_tConfig = 0;
