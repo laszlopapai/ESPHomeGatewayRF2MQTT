@@ -55,7 +55,7 @@ private:
     uint8_t m_gdo2;
 
     uint32_t m_lastPulseDumpTime = 0;
-    static uint32_t m_lastPulseTime = 0;
+    static uint32_t m_lastPulseTime;
     bool m_lastPinState = false;
     uint32_t m_lastModeChangeTime = 0;
     bool m_receiveMode = true;
