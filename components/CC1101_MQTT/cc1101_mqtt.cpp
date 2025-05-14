@@ -82,8 +82,8 @@ void cc1101_mqtt::loop() {
     for (auto pulse : m_pulseLengthList) {
       pulseList += std::to_string(pulse) + " ";
     }
-    
-    std::string pulsesb64 = base64_encode(m_pulseLengthList.data(), m_pulseLengthList.size() * sizeof(uint32_t));
+
+    std::string pulsesb64 = base64_encode((uint8_t*)m_pulseLengthList.data(), m_pulseLengthList.size() * sizeof(uint32_t));
     if (m_pulseLengthList.size() > 0) {
       this->publish("rfproxys3/sensor/pulse_list", pulsesb64);
     }
