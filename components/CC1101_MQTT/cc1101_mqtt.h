@@ -55,7 +55,7 @@ private:
     uint8_t m_gdo2;
 
     uint32_t m_lastPulseDumpTime = 0;
-    uint32_t m_lastPulseTime = 0;
+    static uint32_t m_lastPulseTime = 0;
     bool m_lastPinState = false;
     uint32_t m_lastModeChangeTime = 0;
     bool m_receiveMode = true;
@@ -67,7 +67,7 @@ private:
     GPIOPin *pin_;
 
     std::set<uint8_t> m_pulseLengthSet;
-    std::vector<uint8_t> m_pulseLengthList;
+    static std::vector<uint8_t> m_pulseLengthList;
     std::vector<uint8_t> m_pulseIndices;
 
     ELECHOUSE_CC1101 m_device;
