@@ -56,6 +56,13 @@ void cc1101_mqtt::setup() {
   }
   
   m_lastTransmitTime = m_lastModeChangeTime = m_lastPulseTime = m_lastPulseDumpTime = millis();
+
+  attachInterrupt(m_gdo2, [](){
+    uint32_t time = millis();
+    uint32_t pulseLength = time - m_lastPulseTime;
+    m_pulseLengthList.push_back(pulseLength);
+    m_lastPulseTime = time;
+  }, CHANGE);
 }
 
 void cc1101_mqtt::loop() {
@@ -64,14 +71,14 @@ void cc1101_mqtt::loop() {
   bool state = pin_->digital_read();
 
   // Record pulse lengths
-  if (m_receiveMode && state != m_lastPinState) {
+  /*if (m_receiveMode && state != m_lastPinState) {
     uint32_t pulseLength = time - m_lastPulseTime;
     m_pulseLengthList.push_back(pulseLength);
     auto it = m_pulseLengthSet.insert(pulseLength).first;
     m_pulseIndices.push_back(std::distance(m_pulseLengthSet.begin(), it));
     m_lastPulseTime = time;
     m_lastPinState = state;
-  }
+  }*/
 
   // Dump pulse lengths
   if (m_receiveMode && time - m_lastPulseDumpTime >= 1000) {
