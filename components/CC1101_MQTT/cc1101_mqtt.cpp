@@ -66,6 +66,10 @@ void cc1101_mqtt::interrupt() {
   static uint32_t lastPulseTime = 0;
   uint32_t time = micros();
 
+  if (m_pulseLengthList.size() >= 2048) {
+    return;
+  }
+
   uint32_t pulseLength = time - lastPulseTime;
   m_pulseLengthList.push_back(pulseLength);
   lastPulseTime = time;
