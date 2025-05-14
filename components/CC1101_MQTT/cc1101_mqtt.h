@@ -33,7 +33,6 @@ public:
         this->m_miso = miso;
         this->m_mosi = mosi;
         this->m_ss = ss;
-        m_tConfig = millis();
     }
 
     void set_gdo0(uint8_t gdo0) {

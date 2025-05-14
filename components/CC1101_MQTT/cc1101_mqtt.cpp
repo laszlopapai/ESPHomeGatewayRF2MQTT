@@ -22,7 +22,6 @@ void cc1101_mqtt::setup() {
   m_esp32 = false;
   #endif
 
-  m_tSetup = millis();
 /*
   this->m_radio = new CC1101_dev::Radio(m_ss, m_sck, m_miso, m_mosi, m_gdo0, m_gdo2);
   CC1101_dev::Status s = this->m_radio->begin();
