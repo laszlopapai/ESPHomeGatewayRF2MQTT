@@ -16,7 +16,7 @@ CONF_MISO = "miso_pin"
 CONF_GDO0 = "GDO0_pin"
 CONF_GDO2 = "GDO2_pin"
 
-DEPENDENCIES = ["spi"]
+DEPENDENCIES = ["spi", "mqtt"]
 
 empty_spi_component_ns = cg.esphome_ns.namespace("cc1101")
 EmptySPIComponent = empty_spi_component_ns.class_(
