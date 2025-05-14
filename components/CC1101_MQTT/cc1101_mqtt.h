@@ -24,7 +24,7 @@ public:
     
     void dump_config() override;
 
-    void interrupt();
+    static void interrupt();
 
     void set_pin(GPIOPin *pin) { pin_ = pin; }
 
