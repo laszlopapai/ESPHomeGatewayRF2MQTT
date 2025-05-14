@@ -21,10 +21,6 @@ void cc1101_mqtt::setup() {
   #else
   m_esp32 = false;
   #endif
-  
-  #define WRITE_BURST 0x40     // write burst
-  #define READ_SINGLE 0x80     // read single
-  #define READ_BURST 0xC0      // read burst
 
   m_tSetup = millis();
 /*
