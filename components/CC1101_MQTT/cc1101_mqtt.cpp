@@ -91,7 +91,7 @@ void cc1101_mqtt::loop() {
       pulseIndex += std::to_string(pulse) + " ";
     }
 
-    this->publish("rfproxys3/sensor/pulse_list", pulseList);
+    this->publish("rfproxys3/sensor/pulse_list", "Pulses: " + pulseList, 0, true);
     ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d ts: %d tc: %d esp32: %d", m_spi, m_tSetup, m_tConfig, m_esp32);
     ESP_LOGCONFIG(TAG, "PList: %s", pulseList.c_str());
     ESP_LOGCONFIG(TAG, "PIndx: %s", pulseIndex.c_str());
