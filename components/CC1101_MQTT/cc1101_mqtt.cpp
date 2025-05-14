@@ -60,11 +60,15 @@ void cc1101_mqtt::setup() {
   attachInterrupt(m_gdo2, interrupt, CHANGE);
 }
 
+std::vector<uint32_t> cc1101_mqtt::m_pulseLengthList {};
+
 void cc1101_mqtt::interrupt() {
-    uint32_t time = millis();
-    uint32_t pulseLength = time - m_lastPulseTime;
-    m_pulseLengthList.push_back(pulseLength);
-    m_lastPulseTime = time;
+  static uint32_t lastPulseTime = 0;
+  uint32_t time = micros();
+
+  uint32_t pulseLength = time - lastPulseTime;
+  m_pulseLengthList.push_back(pulseLength);
+  lastPulseTime = time;
 }
 
 void cc1101_mqtt::loop() {
@@ -103,7 +107,7 @@ void cc1101_mqtt::loop() {
     if (m_pulseLengthList.size() > 0) {
       this->publish("rfproxys3/sensor/pulse_list", pulseList);
     }
-    ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d ts: %d tc: %d esp32: %d", m_spi, m_tSetup, m_tConfig, m_esp32);
+    ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d listcapacity: %d", m_spi, m_pulseLengthList.capacity());
     ESP_LOGCONFIG(TAG, "PList: %s", pulseList.c_str());
     ESP_LOGCONFIG(TAG, "PIndx: %s", pulseIndex.c_str());
     m_pulseLengthList.clear();
