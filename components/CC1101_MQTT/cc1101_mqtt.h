@@ -24,6 +24,8 @@ public:
     
     void dump_config() override;
 
+    void interrupt();
+
     void set_pin(GPIOPin *pin) { pin_ = pin; }
 
     void set_spi(uint8_t sck, uint8_t miso, uint8_t mosi, uint8_t ss) {
