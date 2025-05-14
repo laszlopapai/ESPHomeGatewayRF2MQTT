@@ -57,7 +57,7 @@ void cc1101_mqtt::setup() {
   
   m_lastTransmitTime = m_lastModeChangeTime = m_lastPulseTime = m_lastPulseDumpTime = millis();
 
-  attachInterrupt(m_gdo2, [](){
+  attachInterrupt(m_gdo2, [&](){
     uint32_t time = millis();
     uint32_t pulseLength = time - m_lastPulseTime;
     m_pulseLengthList.push_back(pulseLength);
