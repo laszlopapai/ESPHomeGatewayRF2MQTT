@@ -1,6 +1,7 @@
 #include "cc1101_mqtt.h"
 #include <utility>
 #include <string>
+#include "base64.h"
 
 using namespace esphome;
 using namespace esphome::cc1101;
@@ -73,18 +74,6 @@ void cc1101_mqtt::interrupt() {
 void cc1101_mqtt::loop() {
   uint32_t time = millis();
 
-  bool state = pin_->digital_read();
-
-  // Record pulse lengths
-  /*if (m_receiveMode && state != m_lastPinState) {
-    uint32_t pulseLength = time - m_lastPulseTime;
-    m_pulseLengthList.push_back(pulseLength);
-    auto it = m_pulseLengthSet.insert(pulseLength).first;
-    m_pulseIndices.push_back(std::distance(m_pulseLengthSet.begin(), it));
-    m_lastPulseTime = time;
-    m_lastPinState = state;
-  }*/
-
   // Dump pulse lengths
   if (m_receiveMode && time - m_lastPulseDumpTime >= 1000) {
     m_lastPulseDumpTime = time;
@@ -93,25 +82,15 @@ void cc1101_mqtt::loop() {
     for (auto pulse : m_pulseLengthList) {
       pulseList += std::to_string(pulse) + " ";
     }
-
-    std::string pulseIndex = "";
-    for (auto pulse : m_pulseLengthSet) {
-      pulseIndex += std::to_string(pulse) + " ";
-    }
-    pulseIndex += "+ ";
-    for (auto pulse : m_pulseIndices) {
-      pulseIndex += std::to_string(pulse) + " ";
-    }
-
+    
+    std::string pulsesb64 = base64_encode(m_pulseLengthList.data(), m_pulseLengthList.size() * sizeof(uint32_t));
     if (m_pulseLengthList.size() > 0) {
-      this->publish("rfproxys3/sensor/pulse_list", pulseList);
+      this->publish("rfproxys3/sensor/pulse_list", pulsesb64);
     }
     ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d listcapacity: %d", m_spi, m_pulseLengthList.capacity());
     ESP_LOGCONFIG(TAG, "PList: %s", pulseList.c_str());
-    ESP_LOGCONFIG(TAG, "PIndx: %s", pulseIndex.c_str());
+    
     m_pulseLengthList.clear();
-    m_pulseLengthSet.clear();
-    m_pulseIndices.clear();
   }
 
   // Mode change
