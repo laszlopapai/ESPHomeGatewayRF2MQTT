@@ -83,6 +83,21 @@ void cc1101_mqtt::loop() {
   if (m_receiveMode && time - m_lastPulseDumpTime >= 100) {
     m_lastPulseDumpTime = time;
 
+    m_pulseLengthList.clear();
+    m_pulseLengthList.push_back(0);
+    m_pulseLengthList.push_back(2);
+    m_pulseLengthList.push_back(4);
+    m_pulseLengthList.push_back(8);
+    m_pulseLengthList.push_back(16);
+    m_pulseLengthList.push_back(32);
+    m_pulseLengthList.push_back(64);
+    m_pulseLengthList.push_back(128);
+    m_pulseLengthList.push_back(256);
+    m_pulseLengthList.push_back(512);
+    m_pulseLengthList.push_back(1024);
+    m_pulseLengthList.push_back(2048);
+    m_pulseLengthList.push_back(4194304);
+
     std::string pulseList = "";
     for (auto pulse : m_pulseLengthList) {
       pulseList += std::to_string(pulse) + " ";
@@ -93,7 +108,7 @@ void cc1101_mqtt::loop() {
       this->publish("rfproxys3/sensor/pulse_list", pulsesb64);
     }
     ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d listcapacity: %d", m_spi, m_pulseLengthList.capacity());
-    ESP_LOGCONFIG(TAG, "PList: %s", pulseList.c_str());
+    //ESP_LOGCONFIG(TAG, "PList: %s", pulseList.c_str());
     
     m_pulseLengthList.clear();
   }
