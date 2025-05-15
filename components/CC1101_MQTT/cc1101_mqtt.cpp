@@ -67,6 +67,7 @@ void cc1101_mqtt::interrupt() {
   uint32_t time = micros();
 
   if (m_pulseLengthList.size() >= 2048) {
+    lastPulseTime = time;
     return;
   }
 
@@ -79,7 +80,7 @@ void cc1101_mqtt::loop() {
   uint32_t time = millis();
 
   // Dump pulse lengths
-  if (m_receiveMode && time - m_lastPulseDumpTime >= 1000) {
+  if (m_receiveMode && time - m_lastPulseDumpTime >= 100) {
     m_lastPulseDumpTime = time;
 
     std::string pulseList = "";
