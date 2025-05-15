@@ -1,7 +1,6 @@
 #include "cc1101_mqtt.h"
 #include <utility>
 #include <string>
-#include "base64.h"
 
 using namespace esphome;
 using namespace esphome::cc1101;
@@ -87,12 +86,10 @@ void cc1101_mqtt::loop() {
     for (auto pulse : m_pulseLengthList) {
       pulseList += std::to_string(pulse) + " ";
     }
-
-    std::string pulsesb64 = base64_encode((uint8_t*)m_pulseLengthList.data(), m_pulseLengthList.size() * sizeof(uint32_t));
     if (m_pulseLengthList.size() > 0) {
-      this->publish("rfproxys3/sensor/pulse_list", pulsesb64);
-      this->publish("rfproxys3/sensor/pulse_list_str", pulseList);
+      this->publish("rfproxys3/sensor/pulse_list", pulseList);
     }
+    
     ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d listcapacity: %d", m_spi, m_pulseLengthList.capacity());
     
     m_pulseLengthList.clear();
