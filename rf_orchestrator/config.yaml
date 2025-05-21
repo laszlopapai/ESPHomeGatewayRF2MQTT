@@ -1,0 +1,9 @@
+name: "RF MQTT Orchestrator"
+description: "Listens to RF MQTT signals and publishes HA entities"
+version: "1.0.0"
+slug: "rf_orchestrator"
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armv7
