@@ -96,7 +96,7 @@ def on_message(client, userdata, msg):
             count = thSensor.isValid()
             if count >= 0 and count != msgCount:
                 msgCount = count
-                print(f"[{dt.strftime("%Y-%m-%d %H:%M:%S")}] Header: {thSensor.getHeader()}, ID: {thSensor.getID()}, Battery: {thSensor.getBattery()}, TX Mode: {thSensor.getTXMode()}, Channel: {thSensor.getChannel()}, Temperature: {thSensor.getTemperature()}°C, Humidity: {thSensor.getHumidity()}%")
+                print(f"[{dt.strftime('%Y-%m-%d %H:%M:%S')}] Header: {thSensor.getHeader()}, ID: {thSensor.getID()}, Battery: {thSensor.getBattery()}, TX Mode: {thSensor.getTXMode()}, Channel: {thSensor.getChannel()}, Temperature: {thSensor.getTemperature()}°C, Humidity: {thSensor.getHumidity()}%")
                 data = {
                     "id": thSensor.getID(),
                     "battery": thSensor.getBattery(),
@@ -118,7 +118,7 @@ def on_message(client, userdata, msg):
             
             if rfdevice.rx_code_timestamp != timestamp:
                 timestamp = rfdevice.rx_code_timestamp
-                print(f"[{dt.strftime("%Y-%m-%d %H:%M:%S")}] Code: {rfdevice.rx_code}, PulseLength: {rfdevice.rx_pulselength}, Protocol: {rfdevice.rx_proto}")
+                print(f"[{dt.strftime('%Y-%m-%d %H:%M:%S')}] Code: {rfdevice.rx_code}, PulseLength: {rfdevice.rx_pulselength}, Protocol: {rfdevice.rx_proto}")
 
             #client.publish("homeassistant/sensor/th_sensor_0-60/config", json.dumps(configObject), qos=1)
 
