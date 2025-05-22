@@ -1,6 +1,6 @@
 name: "RF MQTT Orchestrator"
 description: "Listens to RF MQTT signals and publishes HA entities"
-version: "1.0.0"
+version: "0.0.1"
 slug: "rf_orchestrator"
 init: false
 arch:
