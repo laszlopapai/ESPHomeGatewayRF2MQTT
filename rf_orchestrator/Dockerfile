@@ -1,7 +1,7 @@
 FROM python:3.11-slim
 
 WORKDIR /app
-COPY run.py .
+COPY *.py .
 
 RUN pip install paho-mqtt numpy
 
