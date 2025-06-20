@@ -12,7 +12,7 @@ MQTT_USER = "pilight"
 MQTT_PASS = "asd123"
 MQTT_TOPIC = "rfproxys3/sensor/pulse_list"
 
-with open('data/options.json') as f:
+with open('/data/options.json') as f:
     config = json.load(f)
 
 client = mqtt.Client()

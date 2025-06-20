@@ -9,6 +9,8 @@ arch:
   - armv7
 options:
   th_sensor_list: |
-    '[{ "home_assistant_id": "th_sensor_1", "device_id": 10, "channel": 1 }]'
+    [
+      { "home_assistant_id": "th_sensor_1", "device_id": 10, "channel": 1 }
+    ]
 schema:
   th_sensor_list: str
