@@ -12,7 +12,7 @@ MQTT_USER = "pilight"
 MQTT_PASS = "asd123"
 MQTT_TOPIC = "rfproxys3/sensor/pulse_list"
 
-with open('/data/options.json') as f:
+with open('data/options.json') as f:
     config = json.load(f)
 
 client = mqtt.Client()
@@ -62,11 +62,11 @@ def deviceConfigObject(name, type, id, ch, unit):
         "device": configDeviceObject,
         "unit_of_measurement": unit,
         "state_topic": f"orchestrator/sensor/th_sensor/{ch}-{id}",
-        "unique_id": f"rf_{type}_sensor_{ch}-{id}",
         "value_template": "{{ value_json." + type + " }}",
         "device_class": type,
         #"icon": "mdi:zigbee",
         "name": f"RF {name} {ch}CH {id}",
+        "unique_id": f"rf_{type}_sensor_{ch}-{id}",
         "object_id": f"rf_{type}_sensor_{ch}-{id}",
         "origin": originObject,
     }
