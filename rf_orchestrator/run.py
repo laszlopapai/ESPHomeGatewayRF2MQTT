@@ -12,7 +12,7 @@ MQTT_USER = "pilight"
 MQTT_PASS = "asd123"
 MQTT_TOPIC = "rfproxys3/sensor/pulse_list"
 
-with open('data/options.json') as f:
+with open('/data/options.json') as f:
     config = json.load(f)
 
 client = mqtt.Client()
@@ -128,6 +128,8 @@ def on_message(client, userdata, msg):
     except Exception as e:
         print(f"MQTT error: {e}")
 
+
+print(config)
 
 client.on_message = on_message
 client.connect(MQTT_BROKER, MQTT_PORT, 60)
