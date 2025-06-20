@@ -107,9 +107,9 @@ def on_message(client, userdata, msg):
                 }
                 client.publish(f"orchestrator/sensor/th_sensor/{thSensor.getChannel()}-{thSensor.getID()}", json.dumps(data), qos=1)
 
-                client.publish("homeassistant/sensor/th_sensor_0-60_temperature/config", deviceConfigObject("Temperature", "temperature", 60, 0, "°C"), qos=1)
-                client.publish("homeassistant/sensor/th_sensor_0-60_humidity/config", deviceConfigObject("Humidity", "humidity", 60, 0, "%"), qos=1)
-                client.publish("homeassistant/sensor/th_sensor_0-60_battery/config", deviceConfigObject("Battery", "battery", 60, 0, ""), qos=1)
+                client.publish("homeassistant/sensor/th_sensor_0-60_temperature/config", deviceConfigObject("Temperature", "temperature", 174, 0, "°C"), qos=1)
+                client.publish("homeassistant/sensor/th_sensor_0-60_humidity/config", deviceConfigObject("Humidity", "humidity", 174, 0, "%"), qos=1)
+                client.publish("homeassistant/sensor/th_sensor_0-60_battery/config", deviceConfigObject("Battery", "battery", 174, 0, ""), qos=1)
 
                 client.publish("homeassistant/sensor/th_sensor_1-47_temperature/config", deviceConfigObject("Temperature", "temperature", 47, 1, "°C"), qos=1)
                 client.publish("homeassistant/sensor/th_sensor_1-47_humidity/config", deviceConfigObject("Humidity", "humidity", 47, 1, "%"), qos=1)
