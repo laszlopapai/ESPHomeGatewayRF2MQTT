@@ -111,13 +111,13 @@ def on_message(client, userdata, msg):
                 client.publish(f"orchestrator/sensor/th_sensor/{thSensor.getChannel()}-{thSensor.getID()}", json.dumps(data), qos=1)
 
                 thSensorList = json.loads(config.get("th_sensor_list", "[]"))
-                for thSensor in thSensorList:
-                    client.publish(f"homeassistant/sensor/{thSensor['home_assistant_id']}/config",
-                                   deviceConfigObject("Temperature", "temperature", thSensor['device_id'], thSensor['channel'] - 1, "°C"), qos=1)
-                    client.publish(f"homeassistant/sensor/{thSensor['home_assistant_id']}/config", 
-                                   deviceConfigObject("Humidity", "humidity", thSensor['device_id'], thSensor['channel'] - 1, "%"), qos=1)
-                    client.publish(f"homeassistant/sensor/{thSensor['home_assistant_id']}/config", 
-                                   deviceConfigObject("Battery", "battery", thSensor['device_id'], thSensor['channel'] - 1, ""), qos=1)
+                for thSensorCfg in thSensorList:
+                    client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}/config",
+                                   deviceConfigObject("Temperature", "temperature", thSensorCfg['device_id'], thSensorCfg['channel'] - 1, "°C"), qos=1)
+                    client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}/config", 
+                                   deviceConfigObject("Humidity", "humidity", thSensorCfg['device_id'], thSensorCfg['channel'] - 1, "%"), qos=1)
+                    client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}/config", 
+                                   deviceConfigObject("Battery", "battery", thSensorCfg['device_id'], thSensorCfg['channel'] - 1, ""), qos=1)
             
             if rfdevice.rx_code_timestamp != timestamp:
                 timestamp = rfdevice.rx_code_timestamp
