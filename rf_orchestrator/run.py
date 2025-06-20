@@ -12,6 +12,9 @@ MQTT_USER = "pilight"
 MQTT_PASS = "asd123"
 MQTT_TOPIC = "rfproxys3/sensor/pulse_list"
 
+with open('data/options.json') as f:
+    config = json.load(f)
+
 client = mqtt.Client()
 rfdevice = rpi_rf.RFDevice()
 thSensor = th_sensor.THSensor()
@@ -107,14 +110,14 @@ def on_message(client, userdata, msg):
                 }
                 client.publish(f"orchestrator/sensor/th_sensor/{thSensor.getChannel()}-{thSensor.getID()}", json.dumps(data), qos=1)
 
-                client.publish("homeassistant/sensor/th_sensor_0-60_temperature/config", deviceConfigObject("Temperature", "temperature", 174, 0, "°C"), qos=1)
-                client.publish("homeassistant/sensor/th_sensor_0-60_humidity/config", deviceConfigObject("Humidity", "humidity", 174, 0, "%"), qos=1)
-                client.publish("homeassistant/sensor/th_sensor_0-60_battery/config", deviceConfigObject("Battery", "battery", 174, 0, ""), qos=1)
-
-                client.publish("homeassistant/sensor/th_sensor_1-47_temperature/config", deviceConfigObject("Temperature", "temperature", 47, 1, "°C"), qos=1)
-                client.publish("homeassistant/sensor/th_sensor_1-47_humidity/config", deviceConfigObject("Humidity", "humidity", 47, 1, "%"), qos=1)
-                client.publish("homeassistant/sensor/th_sensor_1-47_battery/config", deviceConfigObject("Battery", "battery", 47, 1, ""), qos=1)
-
+                thSensorList = json.loads(config.get("th_sensor_list", "[]"))
+                for thSensor in thSensorList:
+                    client.publish(f"homeassistant/sensor/{thSensor['home_assistant_id']}/config",
+                                   deviceConfigObject("Temperature", "temperature", thSensor['device_id'], thSensor['channel'] - 1, "°C"), qos=1)
+                    client.publish(f"homeassistant/sensor/{thSensor['home_assistant_id']}/config", 
+                                   deviceConfigObject("Humidity", "humidity", thSensor['device_id'], thSensor['channel'] - 1, "%"), qos=1)
+                    client.publish(f"homeassistant/sensor/{thSensor['home_assistant_id']}/config", 
+                                   deviceConfigObject("Battery", "battery", thSensor['device_id'], thSensor['channel'] - 1, ""), qos=1)
             
             if rfdevice.rx_code_timestamp != timestamp:
                 timestamp = rfdevice.rx_code_timestamp
@@ -124,6 +127,7 @@ def on_message(client, userdata, msg):
 
     except Exception as e:
         print(f"MQTT error: {e}")
+
 
 client.on_message = on_message
 client.connect(MQTT_BROKER, MQTT_PORT, 60)
