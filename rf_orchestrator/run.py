@@ -57,7 +57,7 @@ configObject = {
     "value_template": "{{ value_json.version }}"
 }
 
-def deviceConfigObject(name, type, id, ch, unit):
+def deviceConfigObject(type, ha_id, id, ch, unit):
     configTHObject = {
         "device": configDeviceObject,
         "unit_of_measurement": unit,
@@ -65,9 +65,9 @@ def deviceConfigObject(name, type, id, ch, unit):
         "value_template": "{{ value_json." + type + " }}",
         "device_class": type,
         #"icon": "mdi:zigbee",
-        "name": f"RF {name} {ch}CH {id}",
-        "unique_id": f"rf_{type}_sensor_{ch}-{id}",
-        "object_id": f"rf_{type}_sensor_{ch}-{id}",
+        "name": ha_id,
+        "unique_id": ha_id,
+        "object_id": ha_id,
         "origin": originObject,
     }
     return json.dumps(configTHObject)
@@ -112,12 +112,12 @@ def on_message(client, userdata, msg):
 
                 thSensorList = json.loads(config.get("th_sensor_list", "[]"))
                 for thSensorCfg in thSensorList:
-                    client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}/config",
-                                   deviceConfigObject("Temperature", "temperature", thSensorCfg['device_id'], thSensorCfg['channel'] - 1, "°C"), qos=1)
-                    client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}/config", 
-                                   deviceConfigObject("Humidity", "humidity", thSensorCfg['device_id'], thSensorCfg['channel'] - 1, "%"), qos=1)
-                    client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}/config", 
-                                   deviceConfigObject("Battery", "battery", thSensorCfg['device_id'], thSensorCfg['channel'] - 1, ""), qos=1)
+                    client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}_temperature/config",
+                                   deviceConfigObject("temperature", thSensorCfg['device_id'], thSensorCfg['channel'] - 1, "°C"), qos=1)
+                    client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}_humidity/config", 
+                                   deviceConfigObject("humidity", thSensorCfg['device_id'], thSensorCfg['channel'] - 1, "%"), qos=1)
+                    client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}_battery/config", 
+                                   deviceConfigObject("battery", thSensorCfg['home_assistant_id'], thSensorCfg['device_id'], thSensorCfg['channel'] - 1, ""), qos=1)
             
             if rfdevice.rx_code_timestamp != timestamp:
                 timestamp = rfdevice.rx_code_timestamp
