@@ -65,9 +65,9 @@ def deviceConfigObject(type, ha_id, id, ch, unit):
         "value_template": "{{ value_json." + type + " }}",
         "device_class": type,
         #"icon": "mdi:zigbee",
-        "name": ha_id + type,
-        "unique_id": ha_id + type,
-        "object_id": ha_id + type,
+        "name": ha_id + '_' + type,
+        "unique_id": ha_id + '_' + type,
+        "object_id": ha_id + '_' + type,
         "origin": originObject,
     }
     return json.dumps(configTHObject)
