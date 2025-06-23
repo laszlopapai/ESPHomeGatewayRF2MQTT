@@ -113,9 +113,9 @@ def on_message(client, userdata, msg):
                 thSensorList = json.loads(config.get("th_sensor_list", "[]"))
                 for thSensorCfg in thSensorList:
                     client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}_temperature/config",
-                                   deviceConfigObject("temperature", thSensorCfg['device_id'], thSensorCfg['channel'] - 1, "°C"), qos=1)
+                                   deviceConfigObject("temperature", thSensorCfg['home_assistant_id'], thSensorCfg['device_id'], thSensorCfg['channel'] - 1, "°C"), qos=1)
                     client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}_humidity/config", 
-                                   deviceConfigObject("humidity", thSensorCfg['device_id'], thSensorCfg['channel'] - 1, "%"), qos=1)
+                                   deviceConfigObject("humidity", thSensorCfg['home_assistant_id'], thSensorCfg['device_id'], thSensorCfg['channel'] - 1, "%"), qos=1)
                     client.publish(f"homeassistant/sensor/{thSensorCfg['home_assistant_id']}_battery/config", 
                                    deviceConfigObject("battery", thSensorCfg['home_assistant_id'], thSensorCfg['device_id'], thSensorCfg['channel'] - 1, ""), qos=1)
             
