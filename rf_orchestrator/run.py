@@ -108,7 +108,10 @@ def on_message(client, userdata, msg):
                     "temperature": thSensor.getTemperature(),
                     "humidity": thSensor.getHumidity()
                 }
-                client.publish(f"orchestrator/sensor/th_sensor/{thSensor.getChannel()}-{thSensor.getID()}", json.dumps(data), qos=1)
+                if data["temperature"] >= -20 and data["temperature"] <= 60 and data["humidity"] >= 0 and data["humidity"] <= 100:
+                    client.publish(f"orchestrator/sensor/th_sensor/{thSensor.getChannel()}-{thSensor.getID()}", json.dumps(data), qos=1)
+                else:
+                    print(f"[{dt}] Invalid data received: {data}")
 
                 thSensorList = json.loads(config.get("th_sensor_list", "[]"))
                 for thSensorCfg in thSensorList:
