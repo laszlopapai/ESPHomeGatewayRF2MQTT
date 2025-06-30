@@ -1,0 +1,21 @@
+name: "RF MQTT Orchestrator"
+description: "Listens to RF MQTT signals and publishes HA entities"
+version: "0.0.1"
+slug: "rf_orchestrator"
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armv7
+options:
+  th_sensor_list: |
+    [
+      { "home_assistant_id": "th_sensor_1", "device_id": 10, "channel": 1 }
+    ]
+  rf_switch_list: |
+    [
+      { "home_assistant_id": "rf_switch_1", "protocol": 1, "on_code": 10, "off_code": 11, "pulselength": 1 },
+      { "home_assistant_id": "rf_switch_2", "protocol": 1, "on_code": 11, "off_code": 12, "pulselength": 1 }
+    ]
+schema:
+  th_sensor_list: str
