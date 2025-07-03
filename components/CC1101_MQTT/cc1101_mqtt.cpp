@@ -72,7 +72,7 @@ void cc1101_mqtt::sendPulses(const std::string &topic, const std::string &state)
   m_transmitTriggered = true;
 
   size_t start = 0, end;
-  while ((end = state.find(" ", start)) != std::string::npos) {
+  while ((end = state.find(' ', start)) != std::string::npos) {
     if (end == start) {
       start++;
       continue; // Skip empty segments
