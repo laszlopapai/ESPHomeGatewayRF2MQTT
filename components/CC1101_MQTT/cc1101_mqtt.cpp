@@ -64,8 +64,31 @@ void cc1101_mqtt::setup() {
 std::vector<uint32_t> cc1101_mqtt::m_pulseLengthList {};
 
 void cc1101_mqtt::sendPulses(const std::string &topic, const std::string &state) {
-    ESP_LOGCONFIG(TAG, "Received pulse list command: %s", state.c_str());
-    m_transmitTriggered = true;
+  ESP_LOGCONFIG(TAG, "Received pulse list command: %s", state.c_str());
+  m_transmitTriggered = true;
+
+  state = state.trim();
+  size_t start = 0, end;
+  try {
+    while ((end = state.find(" ", start)) != std::string::npos) {
+      if (end == start) {
+        start++;
+        continue; // Skip empty segments
+      }
+
+      auto pulse = std::stoi(state.substr(start, end - start));
+      if (start == 0) {
+        invertedTransmit = pulse == 0;
+      }
+      else {
+        m_transmitPulses.push_back(pulse);
+      }
+      start = end + 1;
+    }
+  }
+  catch (const std::exception &e) {
+    ESP_LOGE(TAG, "Error parsing pulse list: %s", e.what());
+  }
 }
 
 void cc1101_mqtt::receivePulses() {
@@ -97,9 +120,20 @@ void cc1101_mqtt::loop() {
       this->publish("rfproxys3/sensor/pulse_list", pulseList);
     }
     
-    ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d listcapacity: %d", m_spi, m_pulseLengthList.capacity());
+    //ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d listcapacity: %d", m_spi, m_pulseLengthList.capacity());
     
     m_pulseLengthList.clear();
+  }
+
+
+  if (m_transmitPulses.size() > 0) {
+    std::string pulseList = "";
+    for (auto pulse : m_transmitPulses) {
+      pulseList += std::to_string(pulse) + " ";
+    }
+    m_transmitPulses.clear();
+
+    ESP_LOGCONFIG(TAG, "CC1101 transmit inv: %d - %s", invertedTransmit, pulseList.c_str());
   }
 
   // Mode change

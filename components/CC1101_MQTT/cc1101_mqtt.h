@@ -70,6 +70,9 @@ private:
 
     static std::vector<uint32_t> m_pulseLengthList;
 
+    bool invertedTransmit = false;
+    std::vector<uint32_t> m_transmitPulses;
+
     ELECHOUSE_CC1101 m_device;
     CC1101_dev::Radio *m_radio;
     
