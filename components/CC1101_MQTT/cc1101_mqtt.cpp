@@ -97,7 +97,7 @@ void cc1101_mqtt::loop() {
       this->publish("rfproxys3/sensor/pulse_list", pulseList);
     }
     
-    //ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d listcapacity: %d", m_spi, m_pulseLengthList.capacity());
+    ESP_LOGCONFIG(TAG, "CC1101 loop spi_status: %d listcapacity: %d", m_spi, m_pulseLengthList.capacity());
     
     m_pulseLengthList.clear();
   }
