@@ -24,7 +24,7 @@ public:
     
     void dump_config() override;
 
-    void sendPulses();
+    static void sendPulses();
 
     static void receivePulses();
 
