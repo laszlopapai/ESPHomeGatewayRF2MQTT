@@ -63,31 +63,35 @@ void cc1101_mqtt::setup() {
 
 std::vector<uint32_t> cc1101_mqtt::m_pulseLengthList {};
 
+bool isNumeric(const std::string& str) {
+  return !str.empty() && std::all_of(str.begin(), str.end(), ::isdigit);
+}
+
 void cc1101_mqtt::sendPulses(const std::string &topic, const std::string &state) {
   ESP_LOGCONFIG(TAG, "Received pulse list command: %s", state.c_str());
   m_transmitTriggered = true;
 
-  state = state.trim();
   size_t start = 0, end;
-  try {
-    while ((end = state.find(" ", start)) != std::string::npos) {
-      if (end == start) {
-        start++;
-        continue; // Skip empty segments
-      }
-
-      auto pulse = std::stoi(state.substr(start, end - start));
-      if (start == 0) {
-        invertedTransmit = pulse == 0;
-      }
-      else {
-        m_transmitPulses.push_back(pulse);
-      }
-      start = end + 1;
+  while ((end = state.find(" ", start)) != std::string::npos) {
+    if (end == start) {
+      start++;
+      continue; // Skip empty segments
     }
-  }
-  catch (const std::exception &e) {
-    ESP_LOGE(TAG, "Error parsing pulse list: %s", e.what());
+    auto pulseStr = state.substr(start, end - start);
+    if (!isNumeric(pulseStr)) {
+      ESP_LOGE(TAG, "Invalid pulse value: %s", pulseStr.c_str());
+      start = end + 1;
+      continue; // Skip invalid segments
+    }
+
+    auto pulse = std::stoi(pulseStr);
+    if (start == 0) {
+      invertedTransmit = pulse == 0;
+    }
+    else {
+      m_transmitPulses.push_back(pulse);
+    }
+    start = end + 1;
   }
 }
 
