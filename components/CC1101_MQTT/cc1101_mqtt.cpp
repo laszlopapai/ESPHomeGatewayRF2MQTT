@@ -78,14 +78,14 @@ void cc1101_mqtt::sendPulses(const std::string &topic, const std::string &state)
       continue; // Skip empty segments
     }
     auto pulseStr = state.substr(start, end - start);
+    ESP_LOGCONFIG(TAG, "Received num: %s", pulseStr.c_str());
     if (!isNumeric(pulseStr)) {
       ESP_LOGE(TAG, "Invalid pulse value: %s", pulseStr.c_str());
-      ESP_LOGCONFIG(TAG, "Invalid num: %s", pulseStr);
+      ESP_LOGCONFIG(TAG, "Invalid num: %s", pulseStr.c_str());
       start = end + 1;
       continue; // Skip invalid segments
     }
 
-    ESP_LOGCONFIG(TAG, "Received num: %s", pulseStr);
     auto pulse = std::stoi(pulseStr);
     if (start == 0) {
       invertedTransmit = pulse == 0;
