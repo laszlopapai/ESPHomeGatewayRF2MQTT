@@ -58,8 +58,8 @@ void cc1101_mqtt::setup() {
 
   attachInterrupt(m_gdo2, receivePulses, CHANGE);
 
-  this->subscribe("rfproxys3/send/pulse_list", [this](const std::string &payload) {
-    ESP_LOGCONFIG(TAG, "Received pulse list command: %s", payload.c_str());
+  this->subscribe("rfproxys3/send/pulse_list", [this](const std::string &topic, const std::string &state) {
+    ESP_LOGCONFIG(TAG, "Received pulse list command: %s", state.c_str());
     this->sendPulses();
   });
 }
