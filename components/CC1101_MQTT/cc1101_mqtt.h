@@ -24,7 +24,7 @@ public:
     
     void dump_config() override;
 
-    static void sendPulses(const std::string &topic, const std::string &state);
+    void sendPulses(const std::string &topic, const std::string &state);
 
     static void receivePulses();
 
