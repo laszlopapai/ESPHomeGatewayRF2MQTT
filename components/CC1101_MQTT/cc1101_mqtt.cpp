@@ -56,12 +56,21 @@ void cc1101_mqtt::setup() {
   
   m_lastTransmitTime = m_lastModeChangeTime = m_lastPulseTime = m_lastPulseDumpTime = millis();
 
-  attachInterrupt(m_gdo2, interrupt, CHANGE);
+  attachInterrupt(m_gdo2, receivePulses, CHANGE);
+
+  this->subscribe("rfproxys3/send/pulse_list", [this](const std::string &payload) {
+    ESP_LOGCONFIG(TAG, "Received pulse list command: %s", payload.c_str());
+    this->sendPulses();
+  });
 }
 
 std::vector<uint32_t> cc1101_mqtt::m_pulseLengthList {};
 
-void cc1101_mqtt::interrupt() {
+void cc1101_mqtt::sendPulses() {
+      m_transmitTriggered = true;
+}
+
+void cc1101_mqtt::receivePulses() {
   static uint32_t lastPulseTime = 0;
   uint32_t time = micros();
 
@@ -96,28 +105,18 @@ void cc1101_mqtt::loop() {
   }
 
   // Mode change
-  if (time - m_lastModeChangeTime > 5000) {
+  if (m_transmitTriggered && time - m_lastModeChangeTime > 5000) {
     m_lastModeChangeTime = time;
     m_receiveMode = !m_receiveMode;
-    m_receiveMode = true; // Always RX mode for now
+    //m_receiveMode = true; // Always RX mode for now
     if (m_receiveMode) {
       ESP_LOGCONFIG(TAG, "CC1101 RX mode");
       ELECHOUSE_cc1101.SetRx();
+      m_transmitTriggered = false;
     } else {
       ESP_LOGCONFIG(TAG, "CC1101 TX mode");
       ELECHOUSE_cc1101.SetTx();
     }
-  }
-
-  // Receive data
-  if (m_receiveMode && m_rcswitch.available()) {    
-    ESP_LOGCONFIG(TAG, "Received %d / %dbit Protocol: %d",
-      m_rcswitch.getReceivedValue(),
-      m_rcswitch.getReceivedBitlength(),
-      m_rcswitch.getReceivedProtocol()
-    );
-
-    m_rcswitch.resetAvailable();
   }
 
   // Transmit data

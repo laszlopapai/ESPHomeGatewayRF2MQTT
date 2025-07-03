@@ -24,7 +24,9 @@ public:
     
     void dump_config() override;
 
-    static void interrupt();
+    void sendPulses();
+
+    static void receivePulses();
 
     void set_pin(GPIOPin *pin) { pin_ = pin; }
 
@@ -58,6 +60,7 @@ private:
     bool m_lastPinState = false;
     uint32_t m_lastModeChangeTime = 0;
     bool m_receiveMode = true;
+    bool m_transmitTriggered = false;
     uint32_t m_lastTransmitTime = 0;
     uint8_t m_transmitRepeats = 0;
     
