@@ -68,7 +68,7 @@ bool isNumeric(const std::string& str) {
 }
 
 void cc1101_mqtt::sendPulses(const std::string &topic, const std::string &state) {
-  ESP_LOGCONFIG(TAG, "Received pulse list command: %s", state.c_str());
+  ESP_LOGI(TAG, "Received pulse list command: %s", state.c_str());
   m_transmitTriggered = true;
 
   size_t start = 0, end;
@@ -78,10 +78,9 @@ void cc1101_mqtt::sendPulses(const std::string &topic, const std::string &state)
       continue; // Skip empty segments
     }
     auto pulseStr = state.substr(start, end - start);
-    ESP_LOGCONFIG(TAG, "Received num: %s", pulseStr.c_str());
+    ESP_LOGV(TAG, "Received num: %s", pulseStr.c_str());
     if (!isNumeric(pulseStr)) {
       ESP_LOGE(TAG, "Invalid pulse value: %s", pulseStr.c_str());
-      ESP_LOGCONFIG(TAG, "Invalid num: %s", pulseStr.c_str());
       start = end + 1;
       continue; // Skip invalid segments
     }
@@ -163,12 +162,12 @@ void cc1101_mqtt::loop() {
     if (m_transmitRepeats > 2) {
       m_transmitRepeats++;
       m_rcswitch.send(13982723, 24);
-      ESP_LOGCONFIG(TAG, "Transmitted 13982723 Off");
+      ESP_LOGD(TAG, "Transmitted 13982723 Off");
     }
     else {
       m_transmitRepeats++;
       m_rcswitch.send(13982732, 24);
-      ESP_LOGCONFIG(TAG, "Transmitted 13982732 On");
+      ESP_LOGD(TAG, "Transmitted 13982732 On");
     }
 
     if (m_transmitRepeats > 5) {
@@ -183,7 +182,7 @@ void cc1101_mqtt::loop() {
       pulseList += std::to_string(pulse) + " ";
     }
 
-    ESP_LOGCONFIG(TAG, "CC1101 transmit inv: %d - %s", m_invertedTransmit, pulseList.c_str());
+    ESP_LOGI(TAG, "CC1101 transmit inv: %d - %s", m_invertedTransmit, pulseList.c_str());
 
     for (size_t i = 0; i < m_transmitPulses.size(); i += 2) {
       if (i + 1 < m_transmitPulses.size()) {
@@ -193,7 +192,7 @@ void cc1101_mqtt::loop() {
         transmit(m_transmitPulses[i], 0);
       }
     }
-    ESP_LOGE(TAG, "CC1101 transmit done.");
+    ESP_LOGI(TAG, "CC1101 transmit done.");
 
     m_transmitPulses.clear();
   }
