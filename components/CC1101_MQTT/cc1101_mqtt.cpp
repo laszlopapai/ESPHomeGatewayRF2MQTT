@@ -88,7 +88,7 @@ void cc1101_mqtt::sendPulses(const std::string &topic, const std::string &state)
 
     auto pulse = std::stoi(pulseStr);
     if (start == 0) {
-      invertedTransmit = pulse == 0;
+      m_invertedTransmit = pulse == 0;
     }
     else {
       m_transmitPulses.push_back(pulse);
@@ -183,7 +183,7 @@ void cc1101_mqtt::loop() {
       pulseList += std::to_string(pulse) + " ";
     }
 
-    ESP_LOGCONFIG(TAG, "CC1101 transmit inv: %d - %s", invertedTransmit, pulseList.c_str());
+    ESP_LOGCONFIG(TAG, "CC1101 transmit inv: %d - %s", m_invertedTransmit, pulseList.c_str());
 
     for (size_t i = 0; i < m_transmitPulses.size(); i += 2) {
       if (i + 1 < m_transmitPulses.size()) {
