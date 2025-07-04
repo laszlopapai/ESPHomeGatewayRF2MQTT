@@ -20,6 +20,8 @@ class cc1101_mqtt
 public:
     void setup() override;
     
+    void transmit(uint32_t high, uint32_t low);
+
     void loop() override;
     
     void dump_config() override;

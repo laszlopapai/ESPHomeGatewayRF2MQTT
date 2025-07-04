@@ -111,6 +111,16 @@ void cc1101_mqtt::receivePulses() {
   lastPulseTime = time;
 }
 
+void cc1101_mqtt::transmit(uint32_t high, uint32_t low) {
+  uint8_t firstLogicLevel = m_invertedTransmit ? LOW : HIGH;
+  uint8_t secondLogicLevel = m_invertedTransmit ? HIGH : LOW;
+
+  digitalWrite(m_gdo0, firstLogicLevel);
+  delayMicroseconds(high);
+  digitalWrite(m_gdo0, secondLogicLevel);
+  delayMicroseconds(low);
+}
+
 void cc1101_mqtt::loop() {
   uint32_t time = millis();
 
@@ -131,17 +141,6 @@ void cc1101_mqtt::loop() {
     m_pulseLengthList.clear();
   }
 
-
-  if (m_transmitPulses.size() > 0) {
-    std::string pulseList = "";
-    for (auto pulse : m_transmitPulses) {
-      pulseList += std::to_string(pulse) + " ";
-    }
-    m_transmitPulses.clear();
-
-    ESP_LOGCONFIG(TAG, "CC1101 transmit inv: %d - %s", invertedTransmit, pulseList.c_str());
-  }
-
   // Mode change
   if (m_transmitTriggered && time - m_lastModeChangeTime > 5000) {
     m_lastModeChangeTime = time;
@@ -158,7 +157,7 @@ void cc1101_mqtt::loop() {
   }
 
   // Transmit data
-  if (!m_receiveMode && time - m_lastTransmitTime > 1000) {
+  if (!m_receiveMode && time - m_lastTransmitTime > 1000 && m_transmitPulses.size() == 0) {
     m_lastTransmitTime = time;
 
     if (m_transmitRepeats > 2) {
@@ -175,6 +174,27 @@ void cc1101_mqtt::loop() {
     if (m_transmitRepeats > 5) {
       m_transmitRepeats = 0;
     }
+  }
+
+
+  if (!m_receiveMode && m_transmitPulses.size() > 0) {
+    std::string pulseList = "";
+    for (auto pulse : m_transmitPulses) {
+      pulseList += std::to_string(pulse) + " ";
+    }
+
+    ESP_LOGCONFIG(TAG, "CC1101 transmit inv: %d - %s", invertedTransmit, pulseList.c_str());
+
+    for (size_t i = 0; i < m_transmitPulses.size(); i += 2) {
+      if (i + 1 < m_transmitPulses.size()) {
+        transmit(m_transmitPulses[i], m_transmitPulses[i + 1]);
+      } else {
+        // If there's an odd number of pulses, just send the last one as high
+        transmit(m_transmitPulses[i], 0);
+      }
+    }
+
+    m_transmitPulses.clear();
   }
 }
 
