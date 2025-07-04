@@ -157,7 +157,7 @@ void cc1101_mqtt::loop() {
   }
 
   // Transmit data
-  if (!m_receiveMode && time - m_lastTransmitTime > 1000 && m_transmitPulses.size() == 0) {
+  if (!m_receiveMode && time - m_lastTransmitTime > 1000 && false) {
     m_lastTransmitTime = time;
 
     if (m_transmitRepeats > 2) {
@@ -193,6 +193,7 @@ void cc1101_mqtt::loop() {
         transmit(m_transmitPulses[i], 0);
       }
     }
+    ESP_LOGE(TAG, "CC1101 transmit done.");
 
     m_transmitPulses.clear();
   }
