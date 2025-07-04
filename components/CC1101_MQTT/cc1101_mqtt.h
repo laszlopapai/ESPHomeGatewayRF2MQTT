@@ -72,7 +72,7 @@ private:
 
     static std::vector<uint32_t> m_pulseLengthList;
 
-    bool invertedTransmit = false;
+    bool m_invertedTransmit = false;
     std::vector<uint32_t> m_transmitPulses;
 
     ELECHOUSE_CC1101 m_device;
