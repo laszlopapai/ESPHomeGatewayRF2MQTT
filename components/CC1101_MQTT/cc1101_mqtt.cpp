@@ -78,7 +78,7 @@ void cc1101_mqtt::sendPulses(const std::string &topic, const std::string &state)
       continue; // Skip empty segments
     }
     auto pulseStr = state.substr(start, end - start);
-    ESP_LOGV(TAG, "Received num: %s", pulseStr.c_str());
+    ESP_LOGD(TAG, "Received num: %s", pulseStr.c_str());
     if (!isNumeric(pulseStr)) {
       ESP_LOGE(TAG, "Invalid pulse value: %s", pulseStr.c_str());
       start = end + 1;
@@ -146,11 +146,11 @@ void cc1101_mqtt::loop() {
     m_receiveMode = !m_receiveMode;
     //m_receiveMode = true; // Always RX mode for now
     if (m_receiveMode) {
-      ESP_LOGCONFIG(TAG, "CC1101 RX mode");
+      ESP_LOGD(TAG, "CC1101 RX mode");
       ELECHOUSE_cc1101.SetRx();
       m_transmitTriggered = false;
     } else {
-      ESP_LOGCONFIG(TAG, "CC1101 TX mode");
+      ESP_LOGD(TAG, "CC1101 TX mode");
       ELECHOUSE_cc1101.SetTx();
     }
   }
