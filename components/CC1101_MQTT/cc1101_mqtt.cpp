@@ -156,7 +156,7 @@ void cc1101_mqtt::loop() {
   }
 
   // Transmit data
-  if (!m_receiveMode && time - m_lastTransmitTime > 1000 && false) {
+  if (!m_receiveMode && time - m_lastTransmitTime > 1000) {
     m_lastTransmitTime = time;
 
     if (m_transmitRepeats > 2) {
