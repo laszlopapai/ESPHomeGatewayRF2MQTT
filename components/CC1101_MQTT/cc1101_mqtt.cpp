@@ -161,6 +161,7 @@ void cc1101_mqtt::loop() {
 
     if (m_transmitRepeats > 2) {
       m_transmitRepeats++;
+      std::string pulseList = "";
       m_rcswitch.send(13982723, 24);
       for (auto pulse : m_rcswitch.ptimings) {
         pulseList += std::to_string(pulse) + " ";
@@ -170,6 +171,7 @@ void cc1101_mqtt::loop() {
     else {
       m_transmitRepeats++;
       m_rcswitch.send(13982732, 24);
+      std::string pulseList = "";
       for (auto pulse : m_rcswitch.ptimings) {
         pulseList += std::to_string(pulse) + " ";
       }
