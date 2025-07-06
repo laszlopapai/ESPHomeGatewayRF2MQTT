@@ -508,7 +508,7 @@ void RCSwitch::send(unsigned long code, unsigned int length) {
 #endif
 
   for (int nRepeat = 0; nRepeat < nRepeatTransmit; nRepeat++) {
-    timings.clear();
+    ptimings.clear();
     for (int i = length-1; i >= 0; i--) {
       if (code & (1L << i))
         this->transmit(protocol.one);
@@ -537,8 +537,8 @@ void RCSwitch::transmit(HighLow pulses) {
   uint8_t secondLogicLevel = (this->protocol.invertedSignal) ? HIGH : LOW;
   
 
-  timings.push_back(pulses.high * this->protocol.pulseLength);
-  timings.push_back(pulses.low * this->protocol.pulseLength);
+  ptimings.push_back(pulses.high * this->protocol.pulseLength);
+  ptimings.push_back(pulses.low * this->protocol.pulseLength);
 
   digitalWrite(this->nTransmitterPin, firstLogicLevel);
   delayMicroseconds( this->protocol.pulseLength * pulses.high);

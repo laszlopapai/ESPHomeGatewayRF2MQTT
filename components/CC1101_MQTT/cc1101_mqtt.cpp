@@ -162,7 +162,7 @@ void cc1101_mqtt::loop() {
     if (m_transmitRepeats > 2) {
       m_transmitRepeats++;
       m_rcswitch.send(13982723, 24);
-      for (auto pulse : m_rcswitch.timings) {
+      for (auto pulse : m_rcswitch.ptimings) {
         pulseList += std::to_string(pulse) + " ";
       }
       ESP_LOGD(TAG, "Transmitted 13982723 Off [%s]", pulseList.c_str());
@@ -170,7 +170,7 @@ void cc1101_mqtt::loop() {
     else {
       m_transmitRepeats++;
       m_rcswitch.send(13982732, 24);
-      for (auto pulse : m_rcswitch.timings) {
+      for (auto pulse : m_rcswitch.ptimings) {
         pulseList += std::to_string(pulse) + " ";
       }
       ESP_LOGD(TAG, "Transmitted 13982732 On [%s]", pulseList.c_str());

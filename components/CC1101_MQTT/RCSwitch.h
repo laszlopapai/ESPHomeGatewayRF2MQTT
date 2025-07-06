@@ -150,7 +150,7 @@ class RCSwitch {
     void setProtocol(int nProtocol, int nPulseLength);
 
     public:
-    std::vector<uint32_t> timings;
+    std::vector<uint32_t> ptimings;
 
   private:
     char* getCodeWordA(const char* sGroup, const char* sDevice, bool bStatus);
