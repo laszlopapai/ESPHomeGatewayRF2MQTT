@@ -64,7 +64,7 @@ private:
     bool m_receiveMode = true;
     bool m_transmitTriggered = false;
     uint32_t m_lastTransmitTime = 0;
-    uint8_t m_transmitRepeats = 0;
+    uint8_t m_transmitRepeats = 5;
     
 
     uint32_t m_spi = (uint32_t)(-1);

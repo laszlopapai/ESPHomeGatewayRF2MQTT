@@ -192,14 +192,17 @@ void cc1101_mqtt::loop() {
 
     ESP_LOGI(TAG, "CC1101 transmit inv: %d - %s", m_invertedTransmit, pulseList.c_str());
 
-    for (size_t i = 0; i < m_transmitPulses.size(); i += 2) {
-      if (i + 1 < m_transmitPulses.size()) {
-        transmit(m_transmitPulses[i], m_transmitPulses[i + 1]);
-      } else {
-        // If there's an odd number of pulses, just send the last one as high
-        transmit(m_transmitPulses[i], 0);
+    for (int j = 0; j < m_transmitRepeats; j++) {
+      for (size_t i = 0; i < m_transmitPulses.size(); i += 2) {
+        if (i + 1 < m_transmitPulses.size()) {
+          transmit(m_transmitPulses[i], m_transmitPulses[i + 1]);
+        } else {
+          // If there's an odd number of pulses, just send the last one as high
+          transmit(m_transmitPulses[i], 0);
+        }
       }
     }
+    digitalWrite(m_gdo0, LOW);
     ESP_LOGI(TAG, "CC1101 transmit done.");
 
     m_transmitPulses.clear();
