@@ -5,4 +5,4 @@ COPY *.py ./
 
 RUN pip install paho-mqtt numpy
 
-CMD ["python", "run.py"]
+CMD ["python", "main.py"]
