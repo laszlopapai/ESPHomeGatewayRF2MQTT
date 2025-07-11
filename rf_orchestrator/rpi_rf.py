@@ -55,6 +55,7 @@ class RFDevice:
         self.rx_proto = None
         self.rx_bitlength = None
         self.rx_pulselength = None
+        self.pulses = []
 
 
     def cleanup(self):
@@ -122,6 +123,7 @@ class RFDevice:
         """Send a binary code."""
         _LOGGER.debug("TX bin: " + str(rawcode))
         for _ in range(0, self.tx_repeat):
+            self.pulses = []
             if self.tx_proto == 6:
                 if not self.tx_sync():
                     return False
@@ -163,9 +165,11 @@ class RFDevice:
 
     def tx_waveform(self, highpulses, lowpulses):
         """Send basic waveform."""
-        if not self.tx_enabled:
-            _LOGGER.error("TX is not enabled, not sending data")
-            return False
+        #if not self.tx_enabled:
+        #    _LOGGER.error("TX is not enabled, not sending data")
+        #    return False
+        self.pulses.append(highpulses * self.tx_pulselength)
+        self.pulses.append(lowpulses * self.tx_pulselength)
         #GPIO.output(self.gpio, GPIO.HIGH)
         self._sleep((highpulses * self.tx_pulselength) / 1000000)
         #GPIO.output(self.gpio, GPIO.LOW)
