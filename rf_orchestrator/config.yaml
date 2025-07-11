@@ -19,3 +19,4 @@ options:
     ]
 schema:
   th_sensor_list: str
+  rf_switch_list: str
