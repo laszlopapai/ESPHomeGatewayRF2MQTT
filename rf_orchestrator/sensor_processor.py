@@ -16,7 +16,9 @@ class SensorDataProcessor:
         temp_change = abs(data["temperature"] - last_data["temperature"])
         hum_change = abs(data["humidity"] - last_data["humidity"])
         dt = data["timestamp"] - last_data["timestamp"]
-        return temp_change <= dt.total_seconds() * temp_rate and hum_change <= dt.total_seconds() * hum_rate
+        dt_mins = dt.total_seconds() / 60.0
+
+        return temp_change <= temp_rate * dt_mins and hum_change <= hum_rate * dt_mins
 
     def process_pulses(self, pulses):
         for timing in pulses:
