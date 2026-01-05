@@ -41,7 +41,7 @@ class THSensor:
         return self.extractBits(14, 15)
     
     def getTemperature(self):
-        return round(self.extractBits(16, 27) * 0.1, 1)
+        return round(self.extractBits(16, 27, True) * 0.1, 1)
     
     def getHumidity(self):
         return self.extractBits(28, 35)
@@ -51,7 +51,7 @@ class THSensor:
             return self.messageCount
         return -1
 
-    def extractBits(self, first: int, last: int) -> int:
+    def extractBits(self, first: int, last: int, signed: bool = False) -> int:
         """
         Extracts bits from `buffer` between bit positions `first` and `last` (inclusive),
         where 0 is the most significant bit (MSB) of a 36-bit value.
@@ -70,7 +70,15 @@ class THSensor:
         # Shift left to drop leading bits, then right to align to LSB
         shift = 35 - last
         mask = (1 << width) - 1
-        return (self.buffer >> shift) & mask
+        value = (self.buffer >> shift) & mask
+
+        if signed:
+            # Two's complement sign handling
+            sign_bit = 1 << (width - 1)
+            if value & sign_bit:
+                value -= 1 << width
+
+        return value
 
     def pushBit(self, bit):
         if bit != Bit.ZERO and bit != Bit.ONE:
