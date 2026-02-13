@@ -17,6 +17,14 @@ options:
       { "home_assistant_id": "rf_switch_1", "protocol": 1, "on_code": 10, "off_code": 11 },
       { "home_assistant_id": "rf_switch_2", "protocol": 1, "on_code": 11, "off_code": 12 }
     ]
+  mqtt_host: localhost
+  mqtt_port: 1883
+  mqtt_user: user
+  mqtt_pass: password
 schema:
   th_sensor_list: str
   rf_switch_list: str
+  mqtt_host: str
+  mqtt_port: int
+  mqtt_user: str
+  mqtt_pass: str

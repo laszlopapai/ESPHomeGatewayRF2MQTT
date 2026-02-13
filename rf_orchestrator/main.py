@@ -29,7 +29,7 @@ def main():
 
     config = config_loader.ConfigLoader()
 
-    mqtt = mqtt_client.MQTTClient("192.168.1.31", 1883, "pilight", "asd123", on_message)
+    mqtt = mqtt_client.MQTTClient(config.get_mqtt_host(), config.get_mqtt_port(), config.get_mqtt_user(), config.get_mqtt_pass(), on_message)
     mqtt.subscribe("rfproxys3/sensor/pulse_list")
     mqtt.subscribe("orchestrator/switch/command")
 
