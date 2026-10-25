@@ -1,0 +1,71 @@
+# RF gateway package: CC1101 raw pulse RX/TX over MQTT (ADR-0008, wire format ADR-0009).
+#
+# Requires in the including config: an `spi:` bus wired to the CC1101 and an `mqtt:` broker.
+# Override the substitutions below to match the wiring and to pick the topic prefix.
+
+substitutions:
+  rf_cs_pin: GPIO10
+  rf_tx_pin: GPIO14 # CC1101 GDO0
+  rf_rx_pin: GPIO46 # CC1101 GDO2
+  rf_frequency: 433.92MHz
+  rf_topic_prefix: rfgateway
+
+cc1101:
+  id: rf_radio
+  cs_pin: ${rf_cs_pin}
+  frequency: ${rf_frequency}
+  modulation_type: ASK/OOK
+
+remote_receiver:
+  id: rf_rx
+  pin: ${rf_rx_pin}
+  # A frame ends after `idle` without edges. Must be longer than gaps inside a frame
+  # (RCSwitch protocol 1 sync is ~10.9 ms) and shorter than the pause between transmissions.
+  idle: 20ms
+  filter: 100us
+  # Drop very short receptions, the CC1101 produces short noise bursts in OOK RX
+  filter_symbols: 10
+  # A burst of repeats arrives as one frame (10 x 24-bit RCSwitch is ~250 symbols)
+  use_dma: true
+  receive_symbols: 512
+  on_raw:
+    then:
+      - mqtt.publish:
+          topic: ${rf_topic_prefix}/rx
+          payload: !lambda |-
+            std::string payload;
+            payload.reserve(x.size() * 6);
+            for (size_t i = 0; i < x.size(); i++) {
+              if (i > 0) payload += ' ';
+              payload += to_string(x[i]);
+            }
+            return payload;
+
+remote_transmitter:
+  id: rf_tx
+  pin: ${rf_tx_pin}
+  carrier_duty_percent: 100%
+  non_blocking: true
+  on_transmit:
+    then:
+      - cc1101.begin_tx: rf_radio
+  on_complete:
+    then:
+      - cc1101.begin_rx: rf_radio
+
+mqtt:
+  on_message:
+    - topic: ${rf_topic_prefix}/tx
+      then:
+        - remote_transmitter.transmit_raw:
+            transmitter_id: rf_tx
+            code: !lambda |-
+              std::vector<int32_t> code;
+              const char *p = x.c_str();
+              char *end;
+              for (long v = strtol(p, &end, 10); end != p; v = strtol(p, &end, 10)) {
+                if (v != 0)
+                  code.push_back(v);
+                p = end;
+              }
+              return code;

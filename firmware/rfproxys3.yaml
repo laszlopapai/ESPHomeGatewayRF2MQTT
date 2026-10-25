@@ -1,0 +1,118 @@
+# RFProxyS3: ESP32-S3 RF gateway + Bluetooth proxy + air quality sensors.
+# Migrated from the Arduino/CC1101_MQTT config to ESP-IDF and the rf_gateway package (ADR-0008).
+
+substitutions:
+  rf_cs_pin: GPIO10
+  rf_tx_pin: GPIO14 # CC1101 GDO0
+  rf_rx_pin: GPIO46 # CC1101 GDO2
+  rf_topic_prefix: rfproxys3/rf
+
+esphome:
+  name: rfproxys3
+  friendly_name: RFProxyS3
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf
+
+packages:
+  rf_gateway: !include rf_gateway.yaml
+  # From another project, include it from git instead:
+  # rf_gateway:
+  #   url: https://github.com/laszlopapai/ESPHomeGatewayRF2MQTT
+  #   ref: main
+  #   files: [firmware/rf_gateway.yaml]
+
+web_server:
+  port: 80
+
+captive_portal:
+
+logger:
+
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "Rfproxys3 Fallback Hotspot"
+    password: !secret fallback_ap_password
+
+mqtt:
+  broker: 10.120.0.5
+  username: S3
+  password: !secret mqtt_password
+
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 800ms
+    window: 800ms
+    active: true
+
+bluetooth_proxy:
+  active: true
+
+# The CC1101 is wired to these pins (the old config listed GPIO36/35/37 here, but the
+# CC1101_MQTT driver ignored this bus and used 12/11/13 directly)
+spi:
+  clk_pin: GPIO12
+  mosi_pin: GPIO11
+  miso_pin: GPIO13
+
+i2c:
+  sda: GPIO08
+  scl: GPIO09
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 3s
+
+  # Air Quality
+  - platform: ens160_i2c
+    eco2:
+      name: "ENS160 eCO2"
+    tvoc:
+      name: "ENS160 Total Volatile Organic Compounds"
+    aqi:
+      id: ens160_air_quality_index
+      name: "ENS160 Air Quality Index"
+    update_interval: 60s
+    address: 0x53
+    compensation:
+      temperature: id_temperature_sensor
+      humidity: id_humidity_sensor
+
+  # Temperature & Humidity
+  - platform: aht10
+    variant: AHT20
+    temperature:
+      id: id_temperature_sensor
+      name: "AHT Temperature"
+    humidity:
+      id: id_humidity_sensor
+      name: "AHT Humidity"
+    update_interval: 60s
+
+text_sensor:
+  - platform: template
+    name: "ENS160 Air Quality Rating"
+    lambda: |-
+      switch ( (int) (id(ens160_air_quality_index).state) ) {
+        case 1: return {"Excellent"};
+        case 2: return {"Good"};
+        case 3: return {"Moderate"};
+        case 4: return {"Poor"};
+        case 5: return {"Unhealthy"};
+        default: return {"Not Available"};
+      }

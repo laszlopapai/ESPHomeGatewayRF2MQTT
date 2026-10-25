@@ -16,7 +16,10 @@ devices to Home Assistant via MQTT discovery. See [docs/adr](docs/adr/README.md)
 
 ```
 repository.yaml                 Home Assistant add-on repository manifest
-components/CC1101_MQTT/         ESPHome external component (CC1101 driver, pulse RX/TX over MQTT)
+components/CC1101_MQTT/         Current firmware: ESPHome external component (Arduino, to be replaced)
+firmware/                       Draft ESP-IDF firmware on built-in ESPHome components (ADR-0008)
+  rf_gateway.yaml               Reusable package: cc1101 + remote_receiver/transmitter + MQTT glue
+  rfproxys3.yaml                Device config for the RFProxyS3 gateway
 rf_orchestrator/                Home Assistant add-on
   config.yaml                   Add-on manifest and options schema
   Dockerfile, requirements.txt  Container build

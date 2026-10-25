@@ -22,3 +22,5 @@ using the format described in [ADR-0001](0001-record-architecture-decisions.md).
 | [0005](0005-python-for-orchestrator.md) | Python as the orchestrator language | Accepted |
 | [0006](0006-addon-vs-custom-integration.md) | Deliver the orchestrator as an add-on or as a custom integration | Proposed |
 | [0007](0007-gateway-transport.md) | Transport between the gateway and the orchestrator | Proposed |
+| [0008](0008-firmware-on-esphome-components.md) | Build the firmware on ESPHome's built-in components | Proposed |
+| [0009](0009-raw-pulse-wire-format-v2.md) | Raw pulse wire format v2: signed durations, one frame per message | Proposed |
