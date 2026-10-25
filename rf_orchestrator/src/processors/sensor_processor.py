@@ -2,11 +2,15 @@ from datetime import datetime
 import json
 from protocols import alecto_ws1700 as th_sensor
 
+# Sensors send every frame several times in a burst (observed: 2-4 copies within ~1 s, ~35 s apart)
+REPEAT_WINDOW_SECONDS = 5
+
 class SensorDataProcessor:
     def __init__(self, config, mqtt_client):
         self.thSensor = th_sensor.THSensor()
         self.msgCount = -1
         self.thLastData = {}
+        self.thLastFrame = {}
         self.config = config
         self.mqtt_client = mqtt_client
 
@@ -19,6 +23,13 @@ class SensorDataProcessor:
         dt_mins = dt.total_seconds() / 60.0
 
         return temp_change <= temp_rate * dt_mins and hum_change <= hum_rate * dt_mins
+
+    def is_repeated_frame(self, key, frame, now):
+        last = self.thLastFrame.get(key)
+        if last is not None and last[0] == frame and (now - last[1]).total_seconds() < REPEAT_WINDOW_SECONDS:
+            return True
+        self.thLastFrame[key] = (frame, now)
+        return False
 
     def process_pulses(self, pulses):
         for timing in pulses:
@@ -38,6 +49,9 @@ class SensorDataProcessor:
                     "humidity": self.thSensor.getHumidity(),
                     "timestamp": datetime.now(),
                 }
+
+                if self.is_repeated_frame((data["id"], data["channel"]), self.thSensor.buffer, data["timestamp"]):
+                    continue
 
                 last_data = self.thLastData.get((data["id"], data["channel"]))
 
