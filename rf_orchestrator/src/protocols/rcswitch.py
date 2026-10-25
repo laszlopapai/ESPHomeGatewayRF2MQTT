@@ -122,8 +122,8 @@ class RFDevice:
     def tx_bin(self, rawcode):
         """Send a binary code."""
         _LOGGER.debug("TX bin: " + str(rawcode))
+        self.pulses = []
         for _ in range(0, self.tx_repeat):
-            self.pulses = []
             if self.tx_proto == 6:
                 if not self.tx_sync():
                     return False

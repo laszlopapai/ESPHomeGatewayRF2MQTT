@@ -26,12 +26,11 @@ class SwitchDataProcessor:
             print(f"Switch {pack['id']} {selected_switch['off_code']} is OFF, proceeding with transmission.")
             self.rfdevice.tx_code(selected_switch["off_code"], selected_switch["protocol"])
 
-        pulse_list = " ".join(str(pulse) for pulse in self.rfdevice.pulses)
-        pulse_list = f"1 {pulse_list} "
-        # 7697411
+        # Pulses alternate high/low, the gateway expects high as positive and low as negative
+        pulse_list = " ".join(str(pulse if i % 2 == 0 else -pulse) for i, pulse in enumerate(self.rfdevice.pulses))
 
         print(f"Transmitted RF code: {pulse_list}")
-        self.mqtt_client.publish(f"rfproxys3/send/pulse_list", pulse_list, qos=1)
+        self.mqtt_client.publish(f"{self.config.get_gateway_topic_prefix()}/tx", pulse_list, qos=1)
     
     def process_pulses(self, pulses):
         for timing in pulses:

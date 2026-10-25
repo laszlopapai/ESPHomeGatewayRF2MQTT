@@ -37,8 +37,8 @@ has been idle for the configured `idle` time.
 
 ## Consequences
 
-- Breaking change: the firmware and the orchestrator must switch together. During the migration the
-  orchestrator could accept both formats.
+- Breaking change: the firmware and the orchestrator must switch together. With a single gateway
+  this is a hard switch (add-on 0.1.0 speaks only v2) rather than a period of supporting both formats.
 - Decoders get mark/space information and whole frames instead of arbitrary 100 ms slices.
 - Transmit payloads grow with the number of repeats (about 2–3 kB for 10 repeats of a 24-bit
   RCSwitch code).

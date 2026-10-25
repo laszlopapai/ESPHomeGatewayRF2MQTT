@@ -4,12 +4,18 @@ import ha_integrator
 from processors import sensor_processor
 from processors import switch_processor
 
+# The gateway sends one frame per message without the idle gap that ended it, but the decoders
+# detect frame boundaries from long gaps, so one is appended after every frame
+FRAME_END_GAP = 100000
+
 def process_pulses(msg, sensor_list):
     try:
         pulse_array = []
-        for val in msg.payload.decode().split(" "):
-            if val.isdigit():
-                pulse_array.append(int(val))
+        for val in msg.payload.decode().split():
+            if val.lstrip("-").isdigit():
+                # Signed durations: positive = high, negative = low; the decoders only use lengths
+                pulse_array.append(abs(int(val)))
+        pulse_array.append(FRAME_END_GAP)
         for sensor in sensor_list:
             sensor.process_pulses(pulse_array)
 
@@ -20,7 +26,7 @@ def process_pulses(msg, sensor_list):
 def main():
 
     def on_message(client, userdata, msg):
-        if msg.topic == "rfproxys3/sensor/pulse_list":
+        if msg.topic == gateway_rx_topic:
             process_pulses(msg, [sensor, switch])
         elif msg.topic == "orchestrator/switch/command":
             switch.process_switch_command(msg)
@@ -35,9 +41,10 @@ def main():
         haintegrator.promoteConfigEntities()
 
     config = config_loader.ConfigLoader()
+    gateway_rx_topic = f"{config.get_gateway_topic_prefix()}/rx"
 
     mqtt = mqtt_client.MQTTClient(config.get_mqtt_host(), config.get_mqtt_port(), config.get_mqtt_user(), config.get_mqtt_pass(), on_message, on_connect)
-    mqtt.subscribe("rfproxys3/sensor/pulse_list")
+    mqtt.subscribe(gateway_rx_topic)
     mqtt.subscribe("orchestrator/switch/command")
     mqtt.subscribe("homeassistant/status")
 

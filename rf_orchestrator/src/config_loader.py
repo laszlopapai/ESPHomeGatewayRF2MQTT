@@ -18,6 +18,9 @@ class ConfigLoader:
     def get_rf_switch_list(self):
         return json.loads(self.config.get("rf_switch_list", "[]"))
 
+    def get_gateway_topic_prefix(self):
+        return self.config.get("gateway_topic_prefix", "rfproxys3/rf")
+
     def get_mqtt_host(self):
         return self.config.get("mqtt_host", "")
 
