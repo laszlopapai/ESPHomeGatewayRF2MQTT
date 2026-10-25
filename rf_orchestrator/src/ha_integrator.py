@@ -36,7 +36,7 @@ class HAIntegrator:
             "origin": self.originObject,
         }
         
-        self.mqtt_client.publish(f"homeassistant/sensor/{id}/config", json.dumps(configTHObject), qos=1)
+        self.mqtt_client.publish(f"homeassistant/sensor/{id}/config", json.dumps(configTHObject), qos=1, retain=True)
     
     def promoteSwitchEntity(self, id):
         configObject = {
@@ -58,7 +58,7 @@ class HAIntegrator:
             "origin": self.originObject,
         }
         
-        self.mqtt_client.publish(f"homeassistant/switch/{id}/config", json.dumps(configObject), qos=1)
+        self.mqtt_client.publish(f"homeassistant/switch/{id}/config", json.dumps(configObject), qos=1, retain=True)
 
 
     def promoteConfigEntities(self):

@@ -24,20 +24,27 @@ def main():
             process_pulses(msg, [sensor, switch])
         elif msg.topic == "orchestrator/switch/command":
             switch.process_switch_command(msg)
+        elif msg.topic == "homeassistant/status":
+            # HA announces "online" after a restart, discovery has to be sent again
+            if msg.payload.decode() == "online":
+                haintegrator.promoteConfigEntities()
         else:
             print(f"Unknown topic: {msg.topic}")
 
+    def on_connect():
+        haintegrator.promoteConfigEntities()
+
     config = config_loader.ConfigLoader()
 
-    mqtt = mqtt_client.MQTTClient(config.get_mqtt_host(), config.get_mqtt_port(), config.get_mqtt_user(), config.get_mqtt_pass(), on_message)
+    mqtt = mqtt_client.MQTTClient(config.get_mqtt_host(), config.get_mqtt_port(), config.get_mqtt_user(), config.get_mqtt_pass(), on_message, on_connect)
     mqtt.subscribe("rfproxys3/sensor/pulse_list")
     mqtt.subscribe("orchestrator/switch/command")
+    mqtt.subscribe("homeassistant/status")
 
     haintegrator = ha_integrator.HAIntegrator(config, mqtt)
     sensor = sensor_processor.SensorDataProcessor(config, mqtt)
     switch = switch_processor.SwitchDataProcessor(config, mqtt)
-    haintegrator.promoteConfigEntities()
-    
+
     print("📡 Listening for RF pulses to forward to Pilight...")
     mqtt.loop_forever()
 
